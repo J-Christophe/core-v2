@@ -66,7 +66,7 @@
 		<!-- Ant action file -->
 		<!-- <res id="AntActionsSpec.xml" src="AntActionsSpec.xml" /> -->
 		<res id="Heading.image" src="res/img/logo_01_petiteTaille.png" />
-		<res id="installer.langsel.img" src="res/img/logo_02_tailleMoyenne.png" />
+		<res id="installer.langsel.img" src="res/img/mizarBackground.png" />
 		<!-- for internationnalization -->
 		<res id="userInputLang.xml_eng" src="install_res/userInputLang.xml_eng" />
 		<res id="userInputLang.xml_fra" src="install_res/userInputLang.xml_fra" />
@@ -80,6 +80,7 @@
 		<variable name="db_url"
 			value="jdbc:${input.database.driver}:file://${input.database.filepath}/${input.database.name}"/>
 		<variable name="smtpUrl" value="${smtpServer}:${smtpPort}"/>
+		<variable name="input.database.filepath" value="${INSTALL_PATH}/data/HSQLDB"/>
 	</dynamicvariables>
 
 	<panels>
@@ -88,15 +89,9 @@
 		<panel classname="TreePacksPanel" />
 		<panel classname="TargetPanel" />
 		<panel classname="UserInputPanel" id="UserInputPanel.0" />
-		<panel classname="UserInputPanel" id="UserInputPanel.1">
-			<!-- Database validator -->
-			<validator classname="fr.cnes.sitools.izpack.validator.JDBCConnectionValidator" />
-		</panel>
 		<panel classname="SummaryPanel" />
 		<panel classname="InstallPanel" />
-		<!-- Panel to create databases -->
-		<!--<panel classname="DatabasePanel" />-->
-		<panel classname="FinishPanel" />
+		<panel classname="SimpleFinishPanel" />
 	</panels>
 	<variables>
 		<variable name="workspacePath" value="workspace" />
@@ -111,50 +106,34 @@
 		<variable name="dbPath" value="res/db" />
 		<variable name="update-classpathPath" value="workspace/sitools-update-classpath" />
 		<variable name="input.database.driver" value="hsqldb" />
-		<variable name="input.database.dbType" value="embedded" />		
+		<variable name="input.database.dbType" value="embedded" />
+		<variable name="input.database.hostname" value="localhost" />
+		<variable name="input.database.port" value="5432" />
+		<variable name="input.database.name" value="CNES" />
+		<variable name="db_schema" value="sitools" />
+		<variable name="db_user" value="admin" />
+		<variable name="db_pwd" value="admin" />
+		<variable name="dbInstallSelected" value="true" />
 	</variables>
 
 	<packs>
 		<!-- SERVER PACKS -->
 		<pack name="Server" preselected="yes" required="yes">
-			<description>Server files (Sitools, lib, cots, scripts, config, data,
-				database)</description>
+			<description>Server files (Sitools, lib, cots, scripts, config, data, database)</description>
 		</pack>
 		<!-- SITOOLS, contains the sitools Jar -->
 		<pack name="Sitools" preselected="yes" required="yes" parent="Server">
-			<description>This package contains the core of the server
-			</description>
+			<description>This package contains the core of the server</description>
 			<file override="update"
 				src="../fr.cnes.sitools.core/dist/lib/fr.cnes.sitools.core.jar"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
 			<fileset override="update" dir="res/logs"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/logs" />
 		</pack>
-		<!-- Astronomy extension -->
-		<pack name="Extension" preselected="yes" required="yes" parent="Server">
-			<description>This package contains the astronomy extension
-			</description>
-			<file override="update"
-				src="../fr.cnes.sitools.extensions/dist/fr.cnes.sitools.extensions.jar"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext" />
-			<file override="update"
-				src="../Astronomy-Extension/fr.cnes.sitools.ext.astronomy/dist/fr.cnes.sitools.ext.astronomy.jar"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext/" />
 
-			<fileset override="update"
-				dir="../Astronomy-Extension/fr.cnes.sitools.ext.astronomy/dist/lib"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext/lib" />
-
-			<fileset override="update" dir="res/logs"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/logs" />
-		</pack>
 		<!-- LIB, contains all the librairies and the custom restlet extensions -->
 		<pack name="libraries" preselected="yes" required="yes" parent="Server">
-			<description>Libraries (org.apache.solr_3.6.1, org.apache.xalan_2.7.1,
-				org.gjt.mm.mysql_5.1.7,
-				org.postgresql_8.3, org.xmlpull_3.1,
-				org.restlet.ext.solr_3.1.0, org.restlet.patched, org.restlet.ext.wadl_2.0.1)
-			</description>
+			<description>Libraries contains all the librairies and the custom restlet extensions</description>
 			<fileset override="update" dir="../libraries" targetdir="$INSTALL_PATH/$libraries"
 				includes="**/*.jar" />
 			<fileset override="update" dir="../org.restlet.ext.solr/" targetdir="$INSTALL_PATH/$workspacePath/org.restlet.ext.solr"
@@ -169,13 +148,13 @@
 		<!-- COTS, contains all the other librairies needed -->
 		<pack name="cots-restlet" preselected="yes" required="yes"
 			parent="Server">
-			<description>Cots-restlet</description>
+			<description>Cots-restlet contains all the other librairies needed</description>
 			<fileset override="update" dir="../../cots/restlet-2.0.5-patched"
 				targetdir="$INSTALL_PATH/cots/restlet-2.0.5-patched" includes="**/*.jar" />
 		</pack>
 		<!-- SCRIPTS, contains the starting scripts -->
 		<pack name="scripts" preselected="yes" required="yes" parent="Server">
-			<description>Scripts</description>
+			<description>Scripts contains the starting scripts</description>
 			<!-- UNIX SCRIPT -->
 			<file override="true" src="$scriptPath/sitools"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
@@ -217,7 +196,7 @@
 		</pack>
 		<!-- CONFIG, contains the config files -->
 		<pack name="config" preselected="yes" required="yes" parent="Server">
-			<description>Config</description>
+			<description>Config contains the configuration files</description>
 			<file override="true" src="$propertiesPath/sitools.properties"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
 			<file override="true"
@@ -235,6 +214,7 @@
 		<pack name="data" preselected="yes" required="yes" parent="Server">
 			<description>Init data</description>
 			<fileset override="update" dir="../../data" targetdir="$INSTALL_PATH/data"/>
+			<fileset override="update" dir="res/data" targetdir="$INSTALL_PATH/data"/>
 			<!-- ADD A USERSTORAGE FOR USER ADMIN TODO remove it in future version -->
 			<file override="true" src="$resPath/data/userstorage/int@0.xml"
 				targetdir="$INSTALL_PATH/data/userstorage" />
@@ -269,23 +249,34 @@
 										
 		</pack>
 		<!-- END OF SERVER PACKS SERVER EXTENSIONS -->
-		<pack name="Server extensions" preselected="yes" required="no">
+		<pack name="Server extensions" preselected="yes" required="yes">
 			<description>Server extensions</description>
 		</pack>
 		<!-- SERVER EXTENSIONS -->
-		<pack name="extensions" preselected="yes" required="no"
+		<pack name="STools2 extensions" preselected="yes" required="yes"
 			parent="Server extensions">
-			<description>Extensions for Converters, Filters,
-				SVAs and Applications
-			</description>
+			<description>Extensions for Converters, Filters, Applications</description>
 			<file override="update"
 				src="../fr.cnes.sitools.extensions/dist/fr.cnes.sitools.extensions.jar"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext" />
 		</pack>
+		<!-- Astronomy extension -->
+		<pack name="Extension" preselected="yes" required="yes" parent="Server extensions">
+			<description>This package contains the astronomy extension</description>
+			<file override="update"
+				src="../fr.cnes.sitools.extensions/dist/fr.cnes.sitools.extensions.jar"
+				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext" />
+			<file override="update"
+				src="../Astronomy-Extension/fr.cnes.sitools.ext.astronomy/dist/fr.cnes.sitools.ext.astronomy.jar"
+				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext/" />
+
+			<fileset override="update"
+				dir="../Astronomy-Extension/fr.cnes.sitools.ext.astronomy/dist/lib"
+				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext/lib" />
+		</pack>
 		<!-- END OF SERVER EXTENTIONS CLIENT PACKS -->
 		<pack name="Client" preselected="yes" required="no">
-			<description>Client files (ext-js, public, client-admin, client-user)
-			</description>
+			<description>Client files (ext-js, public, client-admin, client-user)</description>
 		</pack>
 		<!-- EXT JS -->
 		<pack name="client-cots" preselected="yes" required="no" parent="Client">
@@ -309,7 +300,7 @@
 		</pack>
 		<!-- CLIENT ADMIN -->
 		<pack name="client-admin" preselected="yes" required="no" parent="Client">
-			<description>Client-admin</description>
+			<description>Client-admin : administration panel for MIZAR</description>
 			<fileset override="update" dir="../client-admin"
 				targetdir="$INSTALL_PATH/$workspacePath/client-admin">
 				<exclude name=".*" />
@@ -317,25 +308,21 @@
 			</fileset>
 			<depends packname="public" />
 		</pack>
-		<!-- CLIENT USER -->
-		<pack name="client-user" preselected="yes" required="no" parent="Client">
-			<description>Client-user</description>
-			<fileset override="update" dir="../client-user"
-				targetdir="$INSTALL_PATH/$workspacePath/client-user">
-				<exclude name=".*" />
-				<exclude name=".settings/" />
-			</fileset>
-			<depends packname="public" />
-		</pack>
 		<!-- CLIENT MIZAR -->
 		<pack name="mizar" preselected="yes" required="yes" parent="Client">
-			<description>Client-user for MIZAR</description>
+			<description>MIZAR client</description>
 			<fileset override="update" dir="../client-user/js/modules/mizarModule/app"
 				targetdir="$INSTALL_PATH/$workspacePath/mizar/app">
 				<exclude name=".*" />
 				<exclude name=".settings/" />
 			</fileset>
-			<depends packname="public" />
+			<file override="true" src="res/conf.json" targetdir="$INSTALL_PATH/workspace/mizar/app/js/" />
+			<parsable encoding="UTF-8"
+				targetfile="$INSTALL_PATH/data/plugins_applications/string@68f7ba14-56e8-4196-adb7-22f5acd4bd53.xml" type="ant" />
+			<parsable encoding="UTF-8"
+				targetfile="$INSTALL_PATH/data/plugins_applications/string@7dd1910d-3760-42e7-bfaf-37b9d0a49508.xml" type="ant" />
+			<parsable encoding="UTF-8"
+				targetfile="$INSTALL_PATH/data/plugins_applications/string@b80f37bc-2b06-4456-81a5-f696280c54e7.xml" type="ant" />
 		</pack>
 	</packs>
 </installation>
