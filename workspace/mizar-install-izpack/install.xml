@@ -27,10 +27,11 @@
 		<appname>Mizar</appname>
 		<appversion>1.0</appversion>
 		<authors>
-			<author email="" name="CNES" />
+			<author email="jean-christophe.malapert@cnes.fr" name="CNES" />
 			<author email="" name="Akka Technologies" />
 			<author email="" name="Telespazio France" />
 		</authors>
+		<url>https://github.com/SITools2/RTWeb3D</url>
 		<uninstaller name="Uninstaller.jar" write="yes" />
 		<javaversion>1.6</javaversion>
 		<requiresjdk>no</requiresjdk>
