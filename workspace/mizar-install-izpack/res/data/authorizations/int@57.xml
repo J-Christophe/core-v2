@@ -1,0 +1,21 @@
+<resourceAuthorization>
+  <id>b80f37bc-2b06-4456-81a5-f696280c54e7</id>
+  <name>Cutout UWS</name>
+  <description>UWS application</description>
+  <url>/sitools/cutout</url>
+  <authorizations>
+    <authorize>
+      <role>public</role>
+      <ALL>true</ALL>
+      <POST>true</POST>
+      <GET>true</GET>
+      <PUT>true</PUT>
+      <HEAD>true</HEAD>
+      <OPTIONS>true</OPTIONS>
+    </authorize>
+    <authorize>
+      <role>Administrator</role>
+      <ALL>true</ALL>
+    </authorize>
+  </authorizations>
+</resourceAuthorization>

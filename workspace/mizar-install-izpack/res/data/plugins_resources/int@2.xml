@@ -1,0 +1,60 @@
+<resourcePlugin>
+  <id>4998478d-d70b-4cc9-9e76-504ff05974ca</id>
+  <name>Reverse Name Resolver service</name>
+  <description>This service provides a resource (/reverseNameResolver/{coordSystem}/{coordinates-order}) to reverse the query name resolver service.</description>
+  <className>fr.cnes.sitools.extensions.astro.resource.ReverseNameResolverResourcePlugin</className>
+  <classVersion>1.1</classVersion>
+  <classAuthor>J-C Malapert</classAuthor>
+  <classOwner>CNES</classOwner>
+  <parametersMap>
+    <entry>
+      <string>methods</string>
+      <resourceParameter>
+        <name>methods</name>
+        <description>List of methods implemented for this resource, separate by |</description>
+        <value>GET</value>
+        <valueType>xs:enum-multiple[GET, POST, PUT, DELETE]</valueType>
+        <type>PARAMETER_INTERN</type>
+        <sequence>2</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>fileName</string>
+      <resourceParameter>
+        <name>fileName</name>
+        <description>The name of the file to generate. Fill it to download a file. Leave it Empty to view resource Representation.</description>
+        <value></value>
+        <valueType>xs:template</valueType>
+        <type>PARAMETER_USER_INPUT</type>
+        <sequence>3</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>image</string>
+      <resourceParameter>
+        <name>image</name>
+        <description>The image url</description>
+        <value></value>
+        <valueType>xs:image</valueType>
+        <type>PARAMETER_INTERN</type>
+        <sequence>4</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>url</string>
+      <resourceParameter>
+        <name>url</name>
+        <description>attachment url</description>
+        <value>/plugin/reverseNameResolver/{coordSystem}/{coordinates-order}</value>
+        <valueType>xs:string</valueType>
+        <type>PARAMETER_ATTACHMENT</type>
+        <sequence>1</sequence>
+      </resourceParameter>
+    </entry>
+  </parametersMap>
+  <parent>2344b0ee-f5c5-4324-b647-88d770c17c0a</parent>
+  <resourceClassName>fr.cnes.sitools.extensions.astro.resource.ReverseNameResolverResource</resourceClassName>
+  <applicationClassName></applicationClassName>
+  <dataSetSelection>NONE</dataSetSelection>
+  <behavior>DISPLAY_IN_NEW_TAB</behavior>
+</resourcePlugin>

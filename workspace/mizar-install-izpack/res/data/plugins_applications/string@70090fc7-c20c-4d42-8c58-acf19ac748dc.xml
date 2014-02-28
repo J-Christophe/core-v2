@@ -1,0 +1,42 @@
+<ApplicationPluginModel>
+  <id>70090fc7-c20c-4d42-8c58-acf19ac748dc</id>
+  <name>Proxy Healpix Image cache</name>
+  <description>Proxy Healpix Image cache</description>
+  <className>fr.cnes.sitools.extensions.astro.application.ProxyHealpixCacheApplicationPlugin</className>
+  <classVersion>1.0</classVersion>
+  <classAuthor>J-C Malapert</classAuthor>
+  <classOwner>CNES</classOwner>
+  <parametersMap>
+    <entry>
+      <string>category</string>
+      <ApplicationPluginParameter>
+        <name>category</name>
+        <description>ADMIN</description>
+        <value>USER</value>
+        <valueType>xs:string</valueType>
+      </ApplicationPluginParameter>
+    </entry>
+    <entry>
+      <string>useProxy</string>
+      <ApplicationPluginParameter>
+        <name>useProxy</name>
+        <description>TRUE for proxy usage</description>
+        <value>FALSE</value>
+        <valueType>xs:string</valueType>
+      </ApplicationPluginParameter>
+    </entry>
+    <entry>
+      <string>urlClient</string>
+      <ApplicationPluginParameter>
+        <name>urlClient</name>
+        <description>template for client URL</description>
+        <value>http://alasky.u-strasbg.fr/</value>
+        <valueType>xs:string</valueType>
+      </ApplicationPluginParameter>
+    </entry>
+  </parametersMap>
+  <label>Healpix images at CDS</label>
+  <urlAttach>/sitools/Alasky</urlAttach>
+  <status>ACTIVE</status>
+  <category>USER_DYNAMIC</category>
+</ApplicationPluginModel>

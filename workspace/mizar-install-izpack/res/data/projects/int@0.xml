@@ -1,0 +1,220 @@
+<project>
+  <id>2344b0ee-f5c5-4324-b647-88d770c17c0a</id>
+  <name>MIZAR</name>
+  <description></description>
+  <image>
+    <type>Image</type>
+    <url></url>
+    <mediaType>Image</mediaType>
+  </image>
+  <css></css>
+  <status>ACTIVE</status>
+  <sitoolsAttachementForUsers>/sitools/project/mizar</sitoolsAttachementForUsers>
+  <visible>false</visible>
+  <authorized>false</authorized>
+  <modules>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>DataSetExplorer</id>
+      <name>DataSetExplorer</name>
+      <description>Dataset Explorer</description>
+      <priority>0</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay>news</divIdToDisplay>
+      <xtype>sitools.user.modules.datasetExplorer</xtype>
+      <label>label.datasetExplorer</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>4570d4e4-e5d1-4e7b-8ff4-9c3b400320cf</id>
+      <name>projectDescription</name>
+      <description>Show a Project Description</description>
+      <priority>1</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.projectDescription</xtype>
+      <label>label.projectDescription</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>formsModule</id>
+      <name>Forms</name>
+      <description>Forms Project</description>
+      <priority>2</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.formsModule</xtype>
+      <label>label.forms</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>8e573bd6-a329-448c-8a25-a44134b3e99c</id>
+      <name>Project Services</name>
+      <description>projects services</description>
+      <priority>3</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.projectServices</xtype>
+      <label>label.projectServices</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>9471a14c-c1db-4aff-8fe2-1d4332002579</id>
+      <name>Content viewer</name>
+      <description>HTML/CSS content viewer</description>
+      <priority>4</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.contentViewerModule</xtype>
+      <label>label.contentViewer</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>uploadPosterTest</id>
+      <name>Poster</name>
+      <description>Poster module to test API</description>
+      <priority>5</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.extPoster</xtype>
+      <label>label.poster</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>ProjectsFeeds</id>
+      <name>ProjectsFeeds</name>
+      <description>Feeds for Projects</description>
+      <priority>6</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay>shortcuts</divIdToDisplay>
+      <xtype>sitools.user.modules.feedsReaderProject</xtype>
+      <label>label.projectFeeds</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>projectGraph</id>
+      <name>projectGraph</name>
+      <description>Project Graph</description>
+      <priority>7</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.projectGraphTree</xtype>
+      <label>label.projectGraph</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>DataSetExplorerDataView</id>
+      <name>DataSetExplorerDataView</name>
+      <description>Dataset Explorer with new dataview</description>
+      <priority>8</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.datasetExplorerDataView</xtype>
+      <label>label.datasetExplorerDataview</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>739954a4-5593-48fe-bd5a-3eb4e4c3a7f6</id>
+      <name>formsAsMenu</name>
+      <description>A menu to display forms List</description>
+      <priority>9</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.formsAsMenu</xtype>
+      <label>label.formsAsMenu</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>9093d8f7-8032-4d09-a1c3-43c687dfdebd</id>
+      <name>Content Editor</name>
+      <description>Edit text/html file</description>
+      <priority>10</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.contentEditorModule</xtype>
+      <label>label.contentEditor</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>80f347ca-8003-4297-a96e-a6fdc045f711</id>
+      <name>Datastorage Explorer</name>
+      <description>Browse a Datastorage Directory</description>
+      <priority>11</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.datastorageExplorer</xtype>
+      <label>label.datastorageExplorer</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>83bb0c8d-106f-427f-aedd-e2c34531f51e</id>
+      <name>AddToCartModule</name>
+      <description>Display all data selections ordered by an user</description>
+      <priority>12</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.addToCartModule</xtype>
+      <label>label.myCart</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+    <fr.cnes.sitools.project.model.ProjectModule>
+      <id>fd7788e8-1b9f-4135-876d-7bf76c336e2a</id>
+      <name>Fits Module</name>
+      <description>Visualize FITS Image and Table</description>
+      <priority>13</priority>
+      <categoryModule></categoryModule>
+      <divIdToDisplay></divIdToDisplay>
+      <xtype>sitools.user.modules.sitoolsFitsMain</xtype>
+      <label>label.FitsModule</label>
+    </fr.cnes.sitools.project.model.ProjectModule>
+  </modules>
+  <htmlHeader>&lt;div id=&quot;top-header&quot; style=&quot;background-color: black;&quot;&gt;&lt;a href=&quot;http://www.cnes.fr&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;/sitools/common/res/images/entete_cnes.png&quot; style=&quot;border: none;&quot; /&gt; &lt;/a&gt;&lt;/div&gt;
+</htmlHeader>
+  <htmlDescription>&lt;p&gt;SITools2 est une plate-forme web conviviale permettant de mettre en place un syst&amp;egrave;me de recherche et d&amp;#39;acc&amp;egrave;s aux donn&amp;eacute;es &amp;agrave; partir d&amp;#39;une ou plusieurs bases de donn&amp;eacute;es existantes. SiTools2 permet de prendre en compte et de s&amp;#39;adapter aux structures de nombreuses bases de donn&amp;eacute;es qui sont g&amp;eacute;r&amp;eacute;es dans divers centres scientifiques, et permet d&amp;#39;&amp;eacute;viter des processus lourds et complexes de migration de donn&amp;eacute;es.&lt;/p&gt;
+
+&lt;div class=&quot;field-items&quot;&gt;
+&lt;p&gt;L&amp;#39;architecture de cette plate-forme est compos&amp;eacute;e :&lt;/p&gt;
+
+&lt;ol&gt;
+	&lt;li&gt;d&amp;#39;un serveur de donn&amp;eacute;es exposant des ressources, &lt;/li&gt;
+	&lt;li&gt;d&amp;#39;une interface web pour l&amp;#39;administrateur permettant de configurer l&amp;#39;ensemble des fonctionnalit&amp;eacute;s du serveur, &lt;/li&gt;
+	&lt;li&gt;d&amp;#39;une interface web pour les utilisateurs comportant un portail qui liste les projets, avec un bureau pour chaque projet qui expose l&amp;#39;ensemble des services mis &amp;agrave; disposition par l&amp;#39;administrateur, &lt;/li&gt;
+	&lt;li&gt;d&amp;#39;un m&amp;eacute;canisme de plugins permettant aux d&amp;eacute;veloppeurs d&amp;#39;ajouter des fonctionnalit&amp;eacute;s m&amp;eacute;tiers aussi bien au niveau du serveur qu&amp;#39;au niveau du client et de les partager avec une communaut&amp;eacute; d&amp;#39;utilisateurs. &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;SITools2 s&amp;#39;articule autour de trois concepts importants :&lt;/p&gt;
+
+&lt;ul&gt;
+	&lt;li&gt;la source de donn&amp;eacute;es : infrastructure contenant les donn&amp;eacute;es (actuellement une base de donn&amp;eacute;es relationnelle accessible via l&amp;#39;API JDBC),&lt;/li&gt;
+	&lt;li&gt;le jeu de donn&amp;eacute;es : exposition d&amp;#39;un sous-ensemble de la source de donn&amp;eacute;es par l&amp;#39;interm&amp;eacute;diaire d&amp;#39;un service web,&lt;/li&gt;
+	&lt;li&gt;le projet : ensemble de jeux de donn&amp;eacute;es.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Des services peuvent &amp;ecirc;tre ensuite d&amp;eacute;finis &amp;agrave; partir de ces trois concepts :&lt;/p&gt;
+
+&lt;ul&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition du formulaire de recherche,&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition de la recherche OpenSearch,&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition des fonctions de conversion (unit&amp;eacute;, fonction de transfert),&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition des fonctions de filtrage,&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition de dictionnaires de donn&amp;eacute;es,&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition de flux RSS,&lt;/li&gt;
+	&lt;li&gt;d&amp;eacute;finition et exposition des plugins.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Comme tout syst&amp;egrave;me d&amp;#39;acc&amp;egrave;s, il est important de pouvoir s&amp;eacute;curiser l&amp;#39;acc&amp;egrave;s &amp;agrave; certaines ressources selon le profil de l&amp;#39;utilisateur. C&amp;#39;est pourquoi SITools2 impl&amp;eacute;mente une gestion compl&amp;egrave;te des utilisateurs (information personnalisable, espace de stockage sur le serveur de donn&amp;eacute;es) et permet de s&amp;eacute;curiser l&amp;#39;ensemble des ressources en fonction du r&amp;ocirc;le de chaque utilisateur.&lt;/p&gt;
+&lt;/div&gt;
+</htmlDescription>
+  <maintenance>false</maintenance>
+  <maintenanceText></maintenanceText>
+  <links>
+    <fr.cnes.sitools.project.model.LinkModel>
+      <name>label.legalInformations</name>
+      <url>/sitools/common/html/legalInformations.html</url>
+    </fr.cnes.sitools.project.model.LinkModel>
+    <fr.cnes.sitools.project.model.LinkModel>
+      <name>label.personalInformations</name>
+      <url>/sitools/common/html/personalInformations.html</url>
+    </fr.cnes.sitools.project.model.LinkModel>
+    <fr.cnes.sitools.project.model.LinkModel>
+      <name>label.contacts</name>
+      <url>/sitools/common/html/contacts.html</url>
+    </fr.cnes.sitools.project.model.LinkModel>
+    <fr.cnes.sitools.project.model.LinkModel>
+      <name>label.help</name>
+      <url>/sitools/common/html/help.html</url>
+    </fr.cnes.sitools.project.model.LinkModel>
+    <fr.cnes.sitools.project.model.LinkModel>
+      <name>label.editorialInformations</name>
+      <url>/sitools/common/html/editorialInformations.html</url>
+    </fr.cnes.sitools.project.model.LinkModel>
+  </links>
+  <ftlTemplateFile>default.project.ftl</ftlTemplateFile>
+  <navigationMode>desktop</navigationMode>
+</project>

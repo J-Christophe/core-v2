@@ -72,7 +72,8 @@
 		<res id="userInputLang.xml_fra" src="install_res/userInputLang.xml_fra" />
 		<res id="CustomLangpack.xml_eng" src="install_res/CustomLangpack_eng.xml" />
 		<res id="CustomLangpack.xml_fra" src="install_res/CustomLangpack_fra.xml" />
-		<res id="shortcutSpec.xml" src="install_res/shortcutSpec.xml"/>
+		<res id="Windows_shortcutSpec.xml" src="install_res/windows_shortcut_spec.xml"/>
+		<res id="Unix_shortcutSpec.xml" src="install_res/unix_shortcut_spec.xml"/>
 	</resources>
 
 
@@ -87,7 +88,6 @@
 	<panels>
 		<panel classname="CheckedHelloPanel" />
 		<panel classname="LicencePanel" />
-		<!--<panel classname="TreePacksPanel" />-->
 		<panel classname="TargetPanel" />
 		<panel classname="UserInputPanel" id="UserInputPanel.0" />
 		<panel classname="InstallPanel" />
@@ -325,8 +325,10 @@
 				targetdir="$INSTALL_PATH/$workspacePath/mizar/app">
 				<exclude name=".*" />
 				<exclude name=".settings/" />
+				<exclude name="upload/" />
 			</fileset>
 			<file override="true" src="res/conf.json" targetdir="$INSTALL_PATH/workspace/mizar/app/js/" />
+			<file override="true" src="res/img/mizar.ico" targetdir="$INSTALL_PATH/workspace/mizar/app/css/" />
 			<parsable encoding="UTF-8"
 				targetfile="$INSTALL_PATH/data/plugins_applications/string@68f7ba14-56e8-4196-adb7-22f5acd4bd53.xml" type="ant" />
 			<parsable encoding="UTF-8"
@@ -334,6 +336,21 @@
 			<parsable encoding="UTF-8"
 				targetfile="$INSTALL_PATH/data/plugins_applications/string@b80f37bc-2b06-4456-81a5-f696280c54e7.xml" type="ant" />
 		</pack>
-	</packs>
-	<native type="izpack" name="ShellLink.dll"/>
+	</packs>	
+  	<!--
+      	Enable some native library handling. This is required for
+      	windows registry and for some file creation.
+    	-->
+  	<native type="izpack" name="ShellLink.dll">
+		<os family="windows" />
+	</native>
+  	<native type="izpack" name="ShellLink_x64.dll">
+		<os family="windows" />
+	</native>
+  	<native type="3rdparty" name="COIOSHelper.dll" stage="both">
+    	<!-- Required for windows registry handling -->
+    		<os family="windows" />
+  	</native>
 </installation>
+
+

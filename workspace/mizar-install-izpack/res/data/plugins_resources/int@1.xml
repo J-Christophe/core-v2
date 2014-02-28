@@ -1,0 +1,82 @@
+<resourcePlugin>
+  <id>7a7a5bf7-9666-4989-bfad-730547254c39</id>
+  <name>Name Resolver service</name>
+  <description>This service provides a resource (/nameResolver/{objectName}/{coordSystem}) to query name resolver services. coordSystem variable is either GALACTIC or EQUATORIAL</description>
+  <className>fr.cnes.sitools.extensions.astro.resource.NameResolverResourcePlugin</className>
+  <classVersion>1.0</classVersion>
+  <classAuthor>J-C Malapert</classAuthor>
+  <classOwner>CNES</classOwner>
+  <parametersMap>
+    <entry>
+      <string>nameResolver</string>
+      <resourceParameter>
+        <name>nameResolver</name>
+        <description>Select your resolver name service for avoiding to add resolverName as URL parameter</description>
+        <value>ALL</value>
+        <valueType>xs:enum-multiple[IMCCE,CDS,IAS,SITools2,ALL]</valueType>
+        <type>PARAMETER_USER_INPUT</type>
+        <sequence>5</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>methods</string>
+      <resourceParameter>
+        <name>methods</name>
+        <description>List of methods implemented for this resource, separate by |</description>
+        <value>GET</value>
+        <valueType>xs:enum-multiple[GET, POST, PUT, DELETE]</valueType>
+        <type>PARAMETER_INTERN</type>
+        <sequence>2</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>epoch</string>
+      <resourceParameter>
+        <name>epoch</name>
+        <description>Set an epoch for avoiding to add epoch as URL parameter</description>
+        <value>now</value>
+        <valueType>String</valueType>
+        <type>PARAMETER_USER_INPUT</type>
+        <sequence>6</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>fileName</string>
+      <resourceParameter>
+        <name>fileName</name>
+        <description>The name of the file to generate. Fill it to download a file. Leave it Empty to view resource Representation.</description>
+        <value></value>
+        <valueType>xs:template</valueType>
+        <type>PARAMETER_USER_INPUT</type>
+        <sequence>3</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>image</string>
+      <resourceParameter>
+        <name>image</name>
+        <description>The image url</description>
+        <value></value>
+        <valueType>xs:image</valueType>
+        <type>PARAMETER_INTERN</type>
+        <sequence>4</sequence>
+      </resourceParameter>
+    </entry>
+    <entry>
+      <string>url</string>
+      <resourceParameter>
+        <name>url</name>
+        <description>attachment url</description>
+        <value>/plugin/nameResolver/{objectName}/{coordSystem}</value>
+        <valueType>xs:string</valueType>
+        <type>PARAMETER_ATTACHMENT</type>
+        <sequence>1</sequence>
+      </resourceParameter>
+    </entry>
+  </parametersMap>
+  <parent>2344b0ee-f5c5-4324-b647-88d770c17c0a</parent>
+  <resourceClassName>fr.cnes.sitools.extensions.astro.resource.NameResolverResource</resourceClassName>
+  <applicationClassName></applicationClassName>
+  <dataSetSelection>NONE</dataSetSelection>
+  <behavior>DISPLAY_IN_NEW_TAB</behavior>
+</resourcePlugin>

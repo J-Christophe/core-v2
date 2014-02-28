@@ -1,0 +1,33 @@
+<ApplicationPluginModel>
+  <id>68f7ba14-56e8-4196-adb7-22f5acd4bd53</id>
+  <name>UWS Application</name>
+  <description>UWS application</description>
+  <className>fr.cnes.sitools.extensions.astro.application.UwsApplicationPlugin</className>
+  <classVersion>1.0</classVersion>
+  <classAuthor>J-C Malapert</classAuthor>
+  <classOwner>CNES</classOwner>
+  <parametersMap>
+    <entry>
+      <string>storageDirectory</string>
+      <ApplicationPluginParameter>
+        <name>storageDirectory</name>
+        <description>File path for the storage directory (must start with file://)</description>
+        <value>file://@INSTALL_PATH@@FILE_SEPARATOR@data@FILE_SEPARATOR@uws@FILE_SEPARATOR@healpix</value>
+        <valueType>xs:string</valueType>
+      </ApplicationPluginParameter>
+    </entry>
+    <entry>
+      <string>jobTaskImplementation</string>
+      <ApplicationPluginParameter>
+        <name>jobTaskImplementation</name>
+        <description>Job Task implementation</description>
+        <value>fr.cnes.sitools.astro.vo.uws.HealpixCutOut</value>
+        <valueType>xs:string</valueType>
+      </ApplicationPluginParameter>
+    </entry>
+  </parametersMap>
+  <label>Healpix cut out UWS</label>
+  <urlAttach>/sitools/healpixcut</urlAttach>
+  <status>ACTIVE</status>
+  <category>USER_DYNAMIC</category>
+</ApplicationPluginModel>

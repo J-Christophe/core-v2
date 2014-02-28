@@ -52,6 +52,9 @@ Build the installer using ant
 
 	$ ant
 
+### Build MIZAR as a standalone application
+TODO
+
 ## Installing from the installer
 	$ java -jar SITools2-<version>-install.jar
 

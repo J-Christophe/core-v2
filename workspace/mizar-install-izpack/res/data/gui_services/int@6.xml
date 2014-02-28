@@ -1,0 +1,37 @@
+<guiService>
+  <id>bce4c14d-746d-45e6-a790-e3b1cd9be604</id>
+  <name>Plot service</name>
+  <description>display a plot of the data displayed</description>
+  <label>label.plot</label>
+  <author>AKKA Technologies</author>
+  <version>1.0</version>
+  <icon>/sitools/res/images/icons/plot.png</icon>
+  <xtype>sitools.user.component.dataviews.services.plotService</xtype>
+  <dependencies>
+    <js>
+      <url>
+        <url>/sitools/common/js/plot/flotr2/lib/base64.js</url>
+      </url>
+      <url>
+        <url>/sitools/common/js/plot/flotr2/lib/canvas2image.js</url>
+      </url>
+      <url>
+        <url>/sitools/common/js/plot/flotr2/lib/canvastext.js</url>
+      </url>
+      <url>
+        <url>/sitools/common/js/plot/flotr2/flotr2.min.js</url>
+      </url>
+      <url>
+        <url>/sitools/client-user/js/components/plot/dataPlotter.js</url>
+      </url>
+      <url>
+        <url>/sitools/client-user/js/components/datasetServices/plotService.js</url>
+      </url>
+    </js>
+    <css/>
+  </dependencies>
+  <priority>1</priority>
+  <dataSetSelection>MULTIPLE</dataSetSelection>
+  <defaultGuiService>true</defaultGuiService>
+  <defaultVisibility>true</defaultVisibility>
+</guiService>

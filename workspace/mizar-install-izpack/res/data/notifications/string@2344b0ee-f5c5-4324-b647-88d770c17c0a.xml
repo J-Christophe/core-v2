@@ -1,0 +1,30 @@
+<observable>
+  <uri>2344b0ee-f5c5-4324-b647-88d770c17c0a</uri>
+  <observers>
+    <observer>
+      <uuid>ResourceModel.7a7a5bf7-9666-4989-bfad-730547254c39</uuid>
+      <uriToNotify>riap://component/applications/2344b0ee-f5c5-4324-b647-88d770c17c0a/resources/7a7a5bf7-9666-4989-bfad-730547254c39/notify</uriToNotify>
+      <methodToNotify>PUT</methodToNotify>
+    </observer>
+    <observer>
+      <uuid>ResourceModel.4998478d-d70b-4cc9-9e76-504ff05974ca</uuid>
+      <uriToNotify>riap://component/applications/2344b0ee-f5c5-4324-b647-88d770c17c0a/resources/4998478d-d70b-4cc9-9e76-504ff05974ca/notify</uriToNotify>
+      <methodToNotify>PUT</methodToNotify>
+    </observer>
+    <observer>
+      <uuid>ResourceModel.ecac825e-8895-4521-aacc-d6553d67bd4f</uuid>
+      <uriToNotify>riap://component/applications/2344b0ee-f5c5-4324-b647-88d770c17c0a/resources/ecac825e-8895-4521-aacc-d6553d67bd4f/notify</uriToNotify>
+      <methodToNotify>PUT</methodToNotify>
+    </observer>
+    <observer>
+      <uuid>ResourceModel.c1b24dab-48b0-471f-b9ea-21ced465ac04</uuid>
+      <uriToNotify>riap://component/applications/2344b0ee-f5c5-4324-b647-88d770c17c0a/resources/c1b24dab-48b0-471f-b9ea-21ced465ac04/notify</uriToNotify>
+      <methodToNotify>PUT</methodToNotify>
+    </observer>
+    <observer>
+      <uuid>ResourceModel.56e33fda-08fd-4c81-a3d7-a30e0300f18f</uuid>
+      <uriToNotify>riap://component/applications/2344b0ee-f5c5-4324-b647-88d770c17c0a/resources/56e33fda-08fd-4c81-a3d7-a30e0300f18f/notify</uriToNotify>
+      <methodToNotify>PUT</methodToNotify>
+    </observer>
+  </observers>
+</observable>

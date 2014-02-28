@@ -1,0 +1,14 @@
+<ApplicationPluginModel>
+  <id>17a25e1c-7ed4-4c42-9e95-458eb6eafc63</id>
+  <name>Shortening URL Application</name>
+  <description>This plugin caches a JSON configuration sent by a client and returns a shortenerID. Then the client can retrieve the JSON configuration by calling the resource according to the shortenerID</description>
+  <className>fr.cnes.sitools.extensions.astro.application.ShorteningUrlApplicationPlugin</className>
+  <classVersion>1.0</classVersion>
+  <classAuthor>J-C Malapert</classAuthor>
+  <classOwner>CNES</classOwner>
+  <parametersMap/>
+  <label>Shortener URL</label>
+  <urlAttach>/sitools/shortener</urlAttach>
+  <status>ACTIVE</status>
+  <category>USER_DYNAMIC</category>
+</ApplicationPluginModel>

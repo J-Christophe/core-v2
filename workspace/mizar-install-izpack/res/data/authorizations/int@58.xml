@@ -1,0 +1,16 @@
+<resourceAuthorization>
+  <id>68f7ba14-56e8-4196-adb7-22f5acd4bd53</id>
+  <name>Healpix cut out UWS</name>
+  <description>UWS application</description>
+  <url>/sitools/healpixcut</url>
+  <authorizations>
+    <authorize>
+      <role>public</role>
+      <ALL>true</ALL>
+    </authorize>
+    <authorize>
+      <role>Administrator</role>
+      <ALL>true</ALL>
+    </authorize>
+  </authorizations>
+</resourceAuthorization>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+  <skipIfNotSupported />
+  <programGroup defaultName="MIZAR" location="applications"/>
+
+   <shortcut
+     name="Starts MIZAR server"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target=""
+     workingDirectory=""
+     commandLine="$INSTALL_PATH/sitools.sh restart"
+     initialState="noShow"
+     iconFile="$INSTALL_PATH/workspace/mizar/app/css/images/mizar.png"
+     iconIndex="0"
+     url=""
+     type="Application"
+     encoding="UTF-8"
+     terminal="true"
+     description="Starts the MIZAR server">
+   </shortcut>
+
+   <shortcut
+     name="Stops MIZAR server"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target=""
+     workingDirectory=""
+     commandLine="$INSTALL_PATH/sitools.sh stop"
+     initialState="noShow"
+     iconFile="$INSTALL_PATH/workspace/mizar/app/css/images/mizar.png"
+     iconIndex="1"
+     url=""
+     type="Application"
+     encoding="UTF-8"
+     terminal="true"
+     description="Starts the MIZAR server">
+   </shortcut>
+
+   <shortcut
+     name="MIZAR"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="firefox"
+     workingDirectory=""
+     initialState="noShow"
+     iconFile="$INSTALL_PATH/workspace/mizar/app/css/images/mizar.png"
+     iconIndex="2"
+     commandLine="http://localhost:8182/sitools/mizar/app/index.html"
+     type="Application"
+     encoding="UTF-8"
+     description="Access to MIZAR (running at localhost).">
+   </shortcut>
+
+   <shortcut
+     name="MIZAR uninstaller"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="java"
+     commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/Uninstaller.jar&quot;"
+     initialState="noShow"
+     iconFile="trashcan_full"
+     iconIndex="3"
+     workingDirectory=""
+     type="Application"
+     encoding="UTF-8"
+     description="MIZAR uninstaller">
+   </shortcut>
+
+</shortcuts>

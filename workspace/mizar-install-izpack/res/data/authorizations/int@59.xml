@@ -1,0 +1,16 @@
+<resourceAuthorization>
+  <id>7dd1910d-3760-42e7-bfaf-37b9d0a49508</id>
+  <name>ZSCALE UWS</name>
+  <description>UWS application</description>
+  <url>/sitools/zscale</url>
+  <authorizations>
+    <authorize>
+      <role>public</role>
+      <ALL>true</ALL>
+    </authorize>
+    <authorize>
+      <role>Administrator</role>
+      <ALL>true</ALL>
+    </authorize>
+  </authorizations>
+</resourceAuthorization>
