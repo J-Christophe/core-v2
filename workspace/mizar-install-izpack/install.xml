@@ -72,6 +72,7 @@
 		<res id="userInputLang.xml_fra" src="install_res/userInputLang.xml_fra" />
 		<res id="CustomLangpack.xml_eng" src="install_res/CustomLangpack_eng.xml" />
 		<res id="CustomLangpack.xml_fra" src="install_res/CustomLangpack_fra.xml" />
+		<res id="shortcutSpec.xml" src="install_res/shortcutSpec.xml"/>
 	</resources>
 
 
@@ -86,14 +87,22 @@
 	<panels>
 		<panel classname="CheckedHelloPanel" />
 		<panel classname="LicencePanel" />
-		<panel classname="TreePacksPanel" />
+		<!--<panel classname="TreePacksPanel" />-->
 		<panel classname="TargetPanel" />
 		<panel classname="UserInputPanel" id="UserInputPanel.0" />
-		<panel classname="SummaryPanel" />
 		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel"/>
 		<panel classname="SimpleFinishPanel" />
 	</panels>
 	<variables>
+		<variable name="smtpTls" value="" />
+		<variable name="smtpPwd" value="" />
+		<variable name="smtpId" value="" />
+		<variable name="smtpServer" value="" />
+		<variable name="emailAddress" value="" />
+		<variable name="host_domain" value="localhost" />
+		<variable name="public_host_domain" value="http://localhost:8182" />
+		<variable name="host_port" value="8182" />
 		<variable name="workspacePath" value="workspace" />
 		<variable name="fr.cnes.sitools.corePath" value="workspace/fr.cnes.sitools.core" />
 		<variable name="fr.cnes.sitools.extensions" value="workspace/fr.cnes.sitools.extensions" />
@@ -114,6 +123,7 @@
 		<variable name="db_user" value="admin" />
 		<variable name="db_pwd" value="admin" />
 		<variable name="dbInstallSelected" value="true" />
+		<variable name="DesktopShortcutCheckboxEnabled" value="true"/>
 	</variables>
 
 	<packs>
@@ -325,4 +335,5 @@
 				targetfile="$INSTALL_PATH/data/plugins_applications/string@b80f37bc-2b06-4456-81a5-f696280c54e7.xml" type="ant" />
 		</pack>
 	</packs>
+	<native type="izpack" name="ShellLink.dll"/>
 </installation>
