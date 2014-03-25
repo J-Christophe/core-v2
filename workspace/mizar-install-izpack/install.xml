@@ -30,7 +30,7 @@
 			<author email="jean-christophe.malapert@cnes.fr" name="CNES" />
                         <author email="fabien.lavignotte@telespazio.com" name="Telespazio France" />
                         <author email="maxime.shubin@telespazio.com" name="Telespazio France" />
-			<author email="alexandre.beelen@ias.u-psud.fr" name="IAS (contributor)" />
+			<author email="alexandre.beelen@ias.u-psud.fr" name="IDOC (contributor)" />
 			<author email="jp.boignard@akka.eu" name="Akka Technologies (contributor)" />
 			<author email="m.gond@akka.eu" name="Akka Technologies (contributor)" />
                         <author email="thierry.chevallier@akka.eu" name="Akka Technologies (contributor)" />
@@ -349,10 +349,10 @@
       	Enable some native library handling. This is required for
       	windows registry and for some file creation.
     	-->
-  	<native type="izpack" name="ShellLink.dll">
+	<native type="izpack" name="ShellLink.dll">
 		<os family="windows" />
 	</native>
-  	<native type="izpack" name="ShellLink_x64.dll">
+	<native type="izpack" name="ShellLink_x64.dll">
 		<os family="windows" />
 	</native>
   	<native type="3rdparty" name="COIOSHelper.dll" stage="both">
