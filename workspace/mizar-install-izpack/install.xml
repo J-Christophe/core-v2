@@ -82,6 +82,7 @@
 		<res id="CustomLangpack.xml_fra" src="install_res/CustomLangpack_fra.xml" />
 		<res id="Windows_shortcutSpec.xml" src="install_res/windows_shortcut_spec.xml"/>
 		<res id="Unix_shortcutSpec.xml" src="install_res/unix_shortcut_spec.xml"/>
+		<res id="HTMLInfoPanel.Readme" src="install_res/Readme.html"/>
 	</resources>
 
 
@@ -102,6 +103,7 @@
 		<panel classname="UserInputPanel" id="UserInputPanel.0" />
 		<panel classname="InstallPanel" />
 		<panel classname="ShortcutPanel"/>
+		<panel classname="HTMLInfoPanel" id="Readme"/>
 		<panel classname="SimpleFinishPanel" />
 	</panels>
 	<variables>
@@ -142,75 +144,76 @@
 		<!-- SITOOLS, contains the sitools Jar -->
 		<pack name="Sitools" preselected="yes" required="yes" parent="Server">
 			<description>This package contains the core of the server</description>
-			<file override="update"
-				src="../fr.cnes.sitools.core/dist/lib/fr.cnes.sitools.core.jar"
+			<file override="update" src="../fr.cnes.sitools.core/dist/lib/fr.cnes.sitools.core.jar"
 				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
-			<fileset override="update" dir="res/logs"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/logs" />
+			<fileset override="update" dir="res/logs" targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/logs" />
+			<singlefile override="true" src="install_res/Readme" target="$INSTALL_PATH/Readme" />
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/Readme" type="ant"/>
 		</pack>
 
 		<!-- LIB, contains all the librairies and the custom restlet extensions -->
 		<pack name="libraries" preselected="yes" required="yes" parent="Server">
 			<description>Libraries contains all the librairies and the custom restlet extensions</description>
-			<fileset override="update" dir="../libraries" targetdir="$INSTALL_PATH/$libraries"
-				includes="**/*.jar" />
+			<fileset override="update" dir="../libraries" targetdir="$INSTALL_PATH/$libraries" includes="**/*.jar" />
 			<fileset override="update" dir="../org.restlet.ext.solr/" targetdir="$INSTALL_PATH/$workspacePath/org.restlet.ext.solr"
 				includes="**/*.jar" />
-			<file override="update"
-				src="../org.restlet.patched/org.restlet.patched_1.0.3.jar"
+			<file override="update" src="../org.restlet.patched/org.restlet.patched_1.0.3.jar"
 				targetdir="$INSTALL_PATH/workspace/org.restlet.patched" />
-			<file override="update"
-				src="../org.restlet.ext.wadl/org.restlet.ext.wadl_2.0.1.jar"
+			<file override="update" src="../org.restlet.ext.wadl/org.restlet.ext.wadl_2.0.1.jar"
 				targetdir="$INSTALL_PATH/workspace/org.restlet.ext.wadl" />
 		</pack>
 		<!-- COTS, contains all the other librairies needed -->
 		<pack name="cots-restlet" preselected="yes" required="yes"
 			parent="Server">
 			<description>Cots-restlet contains all the other librairies needed</description>
-			<fileset override="update" dir="../../cots/restlet-2.0.5-patched"
-				targetdir="$INSTALL_PATH/cots/restlet-2.0.5-patched" includes="**/*.jar" />
+			<fileset override="update" dir="../../cots/restlet-2.0.5-patched" targetdir="$INSTALL_PATH/cots/restlet-2.0.5-patched" includes="**/*.jar" />
 		</pack>
 		<!-- SCRIPTS, contains the starting scripts -->
 		<pack name="scripts" preselected="yes" required="yes" parent="Server">
 			<description>Scripts contains the starting scripts</description>
 			<!-- UNIX SCRIPT -->
-			<file override="true" src="$scriptPath/sitools"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
-			<file override="true" src="$scriptPath/startSitools.sh"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
-			<file override="true" src="$scriptPath/sitools.sh" targetdir="$INSTALL_PATH" />
+			<file override="true" src="$scriptPath/sitools" targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
+			<file override="true" src="$scriptPath/startSitools.sh" targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
+			<singlefile override="true" src="$scriptPath/sitools.sh" target="$INSTALL_PATH/mizar.sh">
+				<os family="unix"/>
+				<os family="mac"/>
+			</singlefile>
 			<!-- WINDOWS SCRIPT -->
-			<file override="true" src="$scriptPath/startSitools.bat"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
-			<file override="true" src="$scriptPath/sitools.bat" targetdir="$INSTALL_PATH" />
+			<file override="true" src="$scriptPath/startSitools.bat" targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath" />
+			<singlefile override="true" src="$scriptPath/sitools.bat" target="$INSTALL_PATH/mizar.bat" os="windows"/>
 			<!-- JAR UTILITIES -->
-			<file override="true" src="../../$update-classpathPath/sitools-update-classpath.jar"
-				targetdir="$INSTALL_PATH/$update-classpathPath" />
-			<fileset override="true" dir="res/ext"
-				targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext" />
+			<file override="true" src="../../$update-classpathPath/sitools-update-classpath.jar" targetdir="$INSTALL_PATH/$update-classpathPath" />
+			<fileset override="true" dir="res/ext" targetdir="$INSTALL_PATH/$fr.cnes.sitools.corePath/ext" />
 			<!-- Makes those scripts parsable -->
-			<parsable encoding="UTF-8"
-				targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.sh"
-				type="shell" />
-			<parsable encoding="UTF-8"
-				targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/sitools" type="shell" />
-			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/sitools.sh"
-				type="ant" />
-			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/sitools.bat"
-				type="ant" />
-			<parsable encoding="UTF-8"
-				targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.bat"
-				type="shell" />
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.sh" type="shell">
+				<os family="unix"/>
+				<os family="mac"/>
+			</parsable>
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/sitools" type="shell">
+				<os family="unix"/>
+				<os family="mac"/>
+			</parsable>
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/mizar.sh" type="ant">
+				<os family="unix"/>
+				<os family="mac"/>
+			</parsable>
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/mizar.bat" type="ant" os="windows"/>
+			<parsable encoding="UTF-8" targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.bat" type="shell" os="windows"/>
 			<!-- Makes those scripts executable -->
-			<executable targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.sh"
-				stage="never" />
-			<executable targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/sitools"
-				stage="never" />
-			<executable targetfile="$INSTALL_PATH/sitools.sh" stage="never" />
-			<executable
-				targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.bat"
-				stage="never" />
-			<executable targetfile="$INSTALL_PATH/sitools.bat" stage="never" />
+			<executable targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.sh" stage="never">
+				<os family="unix"/>
+				<os family="mac"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/sitools" stage="never">
+				<os family="unix"/>
+				<os family="mac"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/mizar.sh" stage="never">
+				<os family="unix"/>
+				<os family="mac"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/$fr.cnes.sitools.corePath/startSitools.bat" stage="never" os="windows"/>
+			<executable targetfile="$INSTALL_PATH/mizar.bat" stage="never" os="windows"/>
 		</pack>
 		<!-- CONFIG, contains the config files -->
 		<pack name="config" preselected="yes" required="yes" parent="Server">

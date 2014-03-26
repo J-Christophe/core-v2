@@ -1,0 +1,12 @@
+		******************************************		
+	        *          How to run MIZAR              *
+		******************************************
+
+ To run MIZAR on Windows, please :<br/>
+ use the shortcut if available or click on <i>@INSTALL_PATH@/mizar.bat</i><br/>
+
+
+ To run MIZAR on Unix, please :<br/>
+ use the shortcut if available or run <i>@INSTALL_PATH@/mizar.sh start</i><br/>
+
+ Then connect yourself on http://@HOST_NAME@:8182/sitools/mizar/app
