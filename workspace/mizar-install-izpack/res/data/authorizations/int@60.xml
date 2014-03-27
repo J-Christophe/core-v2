@@ -1,0 +1,12 @@
+<resourceAuthorization>
+  <id>2344b0ee-f5c5-4324-b647-88d770c17c0a</id>
+  <name>MIZAR</name>
+  <description>Exposition du project MIZAR</description>
+  <url>/sitools/project/mizar</url>
+  <authorizations>
+    <authorize>
+      <role>public</role>
+      <ALL>true</ALL>
+    </authorize>
+  </authorizations>
+</resourceAuthorization>
