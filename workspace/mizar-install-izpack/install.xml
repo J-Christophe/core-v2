@@ -30,15 +30,8 @@
 			<author email="jean-christophe.malapert@cnes.fr" name="CNES" />
                         <author email="fabien.lavignotte@telespazio.com" name="Telespazio France" />
                         <author email="maxime.shubin@telespazio.com" name="Telespazio France" />
-			<author email="alexandre.beelen@ias.u-psud.fr" name="IDOC (contributor)" />
-			<author email="jp.boignard@akka.eu" name="Akka Technologies (contributor)" />
-			<author email="m.gond@akka.eu" name="Akka Technologies (contributor)" />
-                        <author email="thierry.chevallier@akka.eu" name="Akka Technologies (contributor)" />
-			<author email="bastien.fiorito@akka.eu" name="Akka Technologies (contributor)" />		
-			<author email="Pierre.Fernique@astro.unistra.fr" name="CDS (contributor)" />
-                        <author email="andre.schaaff@astro.unistra.fr" name="CDS (contributor)" />
 		</authors>
-		<url>https://github.com/SITools2/RTWeb3D</url>
+		<url>http://sitools2.github.io/RTWeb3D</url>
 		<uninstaller name="Uninstaller.jar" write="yes" />
 		<javaversion>1.6</javaversion>
 		<requiresjdk>no</requiresjdk>

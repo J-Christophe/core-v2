@@ -1,12 +1,62 @@
-		******************************************		
-	        *          How to run MIZAR              *
-		******************************************
+Mizar comes with ABSOLUTELY NO WARRANTY.  See the licences directory.
 
- To run MIZAR on Windows, please :<br/>
- use the shortcut if available or click on <i>@INSTALL_PATH@/mizar.bat</i><br/>
+--------------------------------------------------------------------------------
+
+1. INTRODUCTION                  4. QUICK START
+2. INSTALLATION INSTRUCTIONS     5. THANKS
+3. REQUIREMENTS                  
+
+--------------------------------------------------------------------------------
+1. INTRODUCTION
+--------------------------------------------------------------------------------
+ Mizar is a GPLV3 software which renders realistic skies in real time
+ with WebGL. It is available for all platforms.
+
+--------------------------------------------------------------------------------
+2. INSTALLATION INSTRUCTIONS
+--------------------------------------------------------------------------------
+ Just run "java -jar MIZAR-1.0-install.jar"
+
+--------------------------------------------------------------------------------
+3. REQUIREMENTS
+--------------------------------------------------------------------------------
+ JAVA 1.6 or higher
+ A graphical card compatible with WebGL.
+ Compatible browsers : Chrome, Firefox, Safari
+
+--------------------------------------------------------------------------------
+4. QUICK START
+--------------------------------------------------------------------------------
+ To run MIZAR on Windows, please :
+ use the shortcut if available or click on @INSTALL_PATH@/mizar.bat
 
 
- To run MIZAR on Unix, please :<br/>
- use the shortcut if available or run <i>@INSTALL_PATH@/mizar.sh start</i><br/>
+ To run MIZAR on Unix, please :
+ use the shortcut if available or run @INSTALL_PATH@/mizar.sh start
 
  Then connect yourself on http://@HOST_NAME@:8182/sitools/mizar/app
+
+--------------------------------------------------------------------------------
+6. THANKS
+--------------------------------------------------------------------------------
+
+This software is based on technology developed by :
+
+  - GlobWeb (https://github.com/TPZF/GlobWeb) for rendering, developed by TPZF SSA.
+  - Portions of the code related to Healpix and coordinates system transformation have been traduced in JavaScript from Healpix library (http://sourceforge.net/projects/healpix/)
+  - The FITS library (http://astrojs.github.io/fitsjs/) for loading FITS file, developed by Amit Kapadia.
+  - The SAMP library (http://astrojs.github.io/sampjs/) for using the SAMP Web Profile from within web pages, developed by Amit Kapadia.
+  - The WCS library (http://astrojs.github.io/wcsjs/) for computing fits files coordinates on the sky, developed by Amit Kapadia
+  - The GZip library (http://github.com/beatgammit/gzip-js) for uncompressing g-zipped fits files, developed by Jameson Little.
+  - ColorMap have been traduced in JavaScript from Aladin Sky Atlas (http://aladin.u-strasbg.fr/aladin.gml), developed by CDS.
+  - Multi Order Coverage library (http://wiki.ivoa.net/twiki/bin/view/IVOA/MocInfo), developped by CDS 
+  - Hierarchical Progressive Surveys, developed by CDS
+  - Sesame name resolver service, developed by CDS
+  - Reverse name resolver service, developed by CDS
+  - Name resolver service for solar bodies, developed by IMCCE
+  - Healpix library (http://sourceforge.net/projects/healpix/)
+  - SITools2 framework (http://github.com/SITools2/), developed by CNES
+
+This software is also based on external requirements, specified by :
+    - Alexandre Beelen (IDOC)
+    - Andre Schaaff (CDS)
