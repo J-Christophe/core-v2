@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -143,9 +143,10 @@ sitools.user.component.entete.UserProfile = Ext.extend(Ext.Window, {
 			handler : function () {
 			    sitools.userProfile.LoginUtils.connect({
 			        closable : true,
-                    url : loadUrl.get('APP_URL') + '/login',
+                    url : loadUrl.get('APP_URL') + loadUrl.get('APP_LOGIN_PATH_URL') + '/login',
                     register : loadUrl.get('APP_URL') + '/inscriptions/user',
-                    reset : loadUrl.get('APP_URL') + '/resetPassword'
+                    reset : loadUrl.get('APP_URL') + '/lostPassword',
+                    unblacklist : loadUrl.get('APP_URL') + '/unblacklist'                    
                 });			    
 			}
 		});
@@ -157,8 +158,10 @@ sitools.user.component.entete.UserProfile = Ext.extend(Ext.Window, {
 			handler : function () {
 				var register = new sitools.userProfile.Register({
 	                closable : true,
-	                url : "/sitools/inscriptions/user",
-	                login : "/sitools/login"
+	                url : loadUrl.get('APP_URL')+ "/inscriptions/user",
+                    reset : loadUrl.get('APP_URL') + '/lostPassword',
+                    unblacklist : loadUrl.get('APP_URL') + '/unblacklist',
+	                login : loadUrl.get('APP_URL') + loadUrl.get('APP_LOGIN_PATH_URL') + '/login'
 	            });
 	            register.show();
 			}

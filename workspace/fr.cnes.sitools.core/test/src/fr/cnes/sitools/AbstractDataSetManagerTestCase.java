@@ -1,5 +1,5 @@
- /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -33,13 +33,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
 import org.junit.Assert;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
@@ -76,7 +78,7 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
   protected static final String DATASET_ID_FUSE = "testmysql";
 
   /** Class logger */
-  private static Logger logger = Logger.getLogger(AbstractDataSetManagerTestCase.class.getName());
+  private static Logger logger = Engine.getLogger(AbstractDataSetManagerTestCase.class.getName());
 
   /**
    * Invoke POST
@@ -85,7 +87,7 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
    *          DataSet
    */
   public void create(DataSet item) {
-    JsonRepresentation rep = new JsonRepresentation(item);
+    JacksonRepresentation<DataSet> rep = new JacksonRepresentation<DataSet>(item);
     ClientResource cr = new ClientResource(getUrl());
     Representation result = cr.post(rep, getMediaTest());
     assertTrue(cr.getStatus().isSuccess());
@@ -692,7 +694,7 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
       boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -734,7 +736,7 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON is supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON is supported in tests");
         return null; // TODO complete test for XML, Object representation
       }
     }
@@ -754,7 +756,7 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
    */
   public static ArrayList<Record> getRecords(MediaType media, Representation representation) {
     if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null;
     }
 
@@ -788,54 +790,51 @@ public abstract class AbstractDataSetManagerTestCase extends AbstractSitoolsServ
 
     else if (media.isCompatible(MediaType.APPLICATION_JSON)) {
 
-      // hand made JSON deserialization
       try {
-        String result = representation.getText();
-        JSONObject json = new JSONObject(result);
+        // hand made JSON deserialization
+        JsonFactory f = new JsonFactory();
+        JsonParser jp = f.createJsonParser(representation.getStream());
 
         ArrayList<Record> recs = new ArrayList<Record>();
 
-        JSONArray records = json.getJSONArray("data");
-
-        AttributeValue attr;
-        JSONObject recordJSON;
-        Record record = null;
-        String[] names = null;
-        for (int i = 0; i < records.length(); i++) {
-          recordJSON = records.getJSONObject(i);
-
-          recordJSON.remove("uri");
-
-          names = JSONObject.getNames(recordJSON);
-          record = new Record();
-          if (names != null) {
-            for (int j = 0; j < names.length; j++) {
-              attr = new AttributeValue();
-              attr.setName(names[j]);
-              attr.setValue(recordJSON.get(names[j]));
-              record.getAttributeValues().add(attr);
-
+        jp.nextToken(); // will return JsonToken.START_OBJECT (verify?)
+        while (jp.nextToken() != JsonToken.END_OBJECT) {
+          String fieldname = jp.getCurrentName();
+          if ("data".equals(fieldname)) { // contains an object
+            jp.nextToken(); // move to value, or START_OBJECT/START_ARRAY
+            while (jp.nextToken() != JsonToken.END_ARRAY) {
+              Record record = new Record();
+              // lets get a record, loop through the properties of the record
+              while (jp.nextToken() != JsonToken.END_OBJECT) {
+                jp.nextToken();
+                // lets deal with attribute values
+                AttributeValue attr;
+                String namefield = jp.getCurrentName();
+                if (!"uri".equals(namefield)) {
+                  attr = new AttributeValue();
+                  attr.setName(namefield);
+                  attr.setValue(jp.getText());
+                  record.getAttributeValues().add(attr);
+                }
+              }
+              recs.add(record);
             }
           }
-          recs.add(record);
         }
-
+        jp.close(); // ensure resources get cleaned up timely and properly
         return recs;
       }
-      catch (JSONException e) {
-        // TODO Auto-generated catch block
+      catch (JsonParseException e) {
         e.printStackTrace();
-        return null;
       }
       catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
-        return null;
       }
+      return null;
 
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }

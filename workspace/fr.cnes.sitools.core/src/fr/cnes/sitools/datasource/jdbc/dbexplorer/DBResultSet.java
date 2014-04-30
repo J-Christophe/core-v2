@@ -1,5 +1,5 @@
     /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -41,6 +41,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import org.restlet.engine.Engine;
 
 /**
  * Encapsulation of a result set with its database connection in order to release it after use.
@@ -131,7 +133,7 @@ public class DBResultSet implements ResultSet {
    * @return the logger
    */
   private Logger getLogger() {
-    return Logger.getLogger(this.getClass().getName());
+    return Engine.getLogger(this.getClass().getName());
   }
 
   @Override

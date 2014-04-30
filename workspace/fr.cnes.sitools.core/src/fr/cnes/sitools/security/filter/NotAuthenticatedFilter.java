@@ -1,5 +1,5 @@
-    /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -17,6 +17,9 @@
  * along with SITools2.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package fr.cnes.sitools.security.filter;
+
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import org.restlet.Request;
 import org.restlet.Response;
@@ -41,11 +44,30 @@ public class NotAuthenticatedFilter extends Filter {
     if (request.getChallengeResponse() != null) {
       String id = request.getChallengeResponse().getIdentifier();
       if (request.getClientInfo() != null && !request.getClientInfo().isAuthenticated() && id != null && !id.isEmpty()) {
-        response.setStatus(Status.CLIENT_ERROR_FORBIDDEN, "Bad credentials");
+        response.setStatus(Status.CLIENT_ERROR_UNAUTHORIZED, "Bad credentials");
+        log(request, response, id);
         return STOP;
       }
     }
     return CONTINUE;
+  }
+
+  /**
+   * Log.
+   * 
+   * @param request
+   *          the request
+   * @param id
+   *          the id
+   */
+  private void log(Request request, Response response, String id) {
+
+    String message = "Request to : " + request.getResourceRef().getPath()
+        + " forbidden, bad credentials for user: " + id;
+
+    LogRecord record = new LogRecord(Level.WARNING, message);
+    response.getAttributes().put("LOG_RECORD", record);
+
   }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -28,7 +28,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.restlet.data.ChallengeResponse;
@@ -36,10 +35,12 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.ReferenceList;
+import org.restlet.engine.Engine;
 import org.restlet.engine.util.DateUtils;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 
 import com.thoughtworks.xstream.XStream;
@@ -567,7 +568,7 @@ public class StreamingCartOrderResourceTestCase extends AbstractTaskResourceTest
    */
   private void postJSON() {
     // http://localhost:8182/sitools/userstorage/admin?filepath=%2Ftmp&filename=SvaRecordDefinitionFile.json
-    JsonRepresentation repr = new JsonRepresentation(urlFileContent);
+    StringRepresentation repr = new StringRepresentation(urlFileContent, MediaType.APPLICATION_JSON);
 
     Reference reference = new Reference(getBaseUrl()
         + settings.getString(Consts.APP_USERSTORAGE_USER_URL).replace("{identifier}", userLogin) + "/files");
@@ -618,7 +619,7 @@ public class StreamingCartOrderResourceTestCase extends AbstractTaskResourceTest
       Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -670,7 +671,7 @@ public class StreamingCartOrderResourceTestCase extends AbstractTaskResourceTest
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test with ObjectRepresentation
       }
     }
@@ -690,7 +691,7 @@ public class StreamingCartOrderResourceTestCase extends AbstractTaskResourceTest
    */
   public static Representation getRepresentation(TaskModel item, MediaType media) {
     if (media.equals(MediaType.APPLICATION_JSON)) {
-      return new JsonRepresentation(item);
+      return new JacksonRepresentation<TaskModel>(item);
     }
     else if (media.equals(MediaType.APPLICATION_XML)) {
       XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
@@ -700,7 +701,7 @@ public class StreamingCartOrderResourceTestCase extends AbstractTaskResourceTest
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }

@@ -1,5 +1,5 @@
- /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -27,26 +27,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Component;
 import org.restlet.Context;
-import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
-import com.thoughtworks.xstream.XStream;
-
 import fr.cnes.sitools.common.SitoolsSettings;
-import fr.cnes.sitools.common.SitoolsXStreamRepresentation;
-import fr.cnes.sitools.common.XStreamFactory;
 import fr.cnes.sitools.common.application.ContextAttributes;
 import fr.cnes.sitools.common.model.Resource;
 import fr.cnes.sitools.common.model.Response;
@@ -57,8 +49,12 @@ import fr.cnes.sitools.project.graph.GraphStoreXML;
 import fr.cnes.sitools.project.graph.model.Graph;
 import fr.cnes.sitools.project.model.Project;
 import fr.cnes.sitools.project.model.ProjectModule;
+import fr.cnes.sitools.registry.AppRegistryApplication;
+import fr.cnes.sitools.registry.AppRegistryStoreXML;
 import fr.cnes.sitools.server.Consts;
 import fr.cnes.sitools.util.RIAPUtils;
+import fr.cnes.sitools.utils.GetRepresentationUtils;
+import fr.cnes.sitools.utils.GetResponseUtils;
 
 /**
  * Test CRUD Project Rest API
@@ -130,8 +126,8 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
   public void setUp() throws Exception {
     File storeDirectory = new File(getTestRepository());
     File storeGraphDirectory = new File(getTestGraphRepository());
-
-    
+    File appRegistry = new File(super.getTestRepository()
+        + SitoolsSettings.getInstance().getString(Consts.APP_APPLICATIONS_STORE_DIR));
 
     if (this.component == null) {
       this.component = new Component();
@@ -144,24 +140,42 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
       Context ctx = this.component.getContext().createChildContext();
       ctx.getAttributes().put(ContextAttributes.SETTINGS, SitoolsSettings.getInstance());
 
-      
       cleanDirectory(storeDirectory);
       storeGraph = new GraphStoreXML(storeGraphDirectory, ctx);
       store = new ProjectStoreXML(storeDirectory, ctx);
-      
+
       Map<String, Object> stores = new ConcurrentHashMap<String, Object>();
       stores.put(Consts.APP_STORE_PROJECT, store);
       stores.put(Consts.APP_STORE_GRAPH, storeGraph);
 
-      SitoolsSettings.getInstance().setStores(stores);
-      
+      SitoolsSettings settings = SitoolsSettings.getInstance();
+      settings.setStores(stores);
+
       ctx.getAttributes().put(ContextAttributes.APP_STORE, store);
+
+      // ===========================================================================
+      // ApplicationManager for application registering
+
+      // Store
+      AppRegistryStoreXML storeApp = new AppRegistryStoreXML(appRegistry, ctx);
+
+      // Context
+      Context appContext = component.getContext().createChildContext();
+      String appReference = getBaseUrl() + settings.getString(Consts.APP_APPLICATIONS_URL);
+      appContext.getAttributes().put(ContextAttributes.SETTINGS, settings);
+      appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
+      appContext.getAttributes().put(ContextAttributes.APP_STORE, storeApp);
+
+      // Application
+      AppRegistryApplication appManager = new AppRegistryApplication(appContext);
+
+      // for applications whose attach / detach themselves other applications to
+      // the virtualhost.
+      settings.setAppRegistry(appManager);
 
       this.component.getDefaultHost().attach(getAttachUrl(),
           new ProjectAdministration(this.component.getDefaultHost(), ctx));
     }
-
-    
 
     if (!this.component.isStarted()) {
       this.component.start();
@@ -280,7 +294,7 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
    *           Exception when copying configuration files from TEST to data/TESTS
    */
   public void create(Project item) throws IOException {
-    Representation rep = getRepresentation(item, getMediaTest());
+    Representation rep = GetRepresentationUtils.getRepresentationProject(item, getMediaTest());
     ClientResource cr = new ClientResource(getBaseUrl());
     docAPI.appendRequest(Method.POST, cr, rep);
 
@@ -288,7 +302,8 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
     assertNotNull(result);
     assertTrue(cr.getStatus().isSuccess());
     if (!docAPI.appendResponse(result)) {
-      Response response = getResponse(getMediaTest(), result, Project.class);
+      
+      Response response = GetResponseUtils.getResponseProject(getMediaTest(), result, Project.class);
       assertTrue(response.getSuccess());
       Project prj = (Project) response.getItem();
       assertEquals(prj.getName(), item.getName());
@@ -314,7 +329,7 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
     if (!docAPI.appendResponse(result)) {
       assertNotNull(result);
       assertTrue(cr.getStatus().isSuccess());
-      Response response = getResponse(getMediaTest(), result, Project.class);
+      Response response = GetResponseUtils.getResponseProject(getMediaTest(), result, Project.class);
       assertTrue(response.getSuccess());
       Project prj = (Project) response.getItem();
       assertEquals(prj.getName(), item.getName());
@@ -332,7 +347,7 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
    *           Exception when copying configuration files from TEST to data/TESTS
    */
   public void update(Project item) throws IOException {
-    Representation rep = getRepresentation(item, getMediaTest());
+    Representation rep = GetRepresentationUtils.getRepresentationProject(item, getMediaTest());
     ClientResource cr = new ClientResource(getBaseUrl() + "/" + item.getId());
     docAPI.appendRequest(Method.PUT, cr, rep);
 
@@ -340,7 +355,7 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
     if (!docAPI.appendResponse(result)) {
       assertNotNull(result);
       assertTrue(cr.getStatus().isSuccess());
-      Response response = getResponse(getMediaTest(), result, Project.class);
+      Response response = GetResponseUtils.getResponseProject(getMediaTest(), result, Project.class);
       assertTrue(response.getSuccess());
       Project prj = (Project) response.getItem();
       assertEquals(prj.getName(), item.getName());
@@ -366,7 +381,7 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
     if (!docAPI.appendResponse(result)) {
       assertNotNull(result);
       assertTrue(cr.getStatus().isSuccess());
-      Response response = getResponse(getMediaTest(), result, Project.class);
+      Response response = GetResponseUtils.getResponseProject(getMediaTest(), result, Project.class);
       assertTrue(response.getSuccess());
       RIAPUtils.exhaust(result);
     }
@@ -387,140 +402,11 @@ public abstract class AbstractProjectTestCase extends AbstractSitoolsTestCase {
       assertNotNull(result);
       assertTrue(cr.getStatus().isSuccess());
 
-      Response response = getResponse(getMediaTest(), result, Project.class);
+      Response response = GetResponseUtils.getResponseProject(getMediaTest(), result, Project.class);
       assertTrue(response.getSuccess());
       assertEquals(0, response.getTotal().intValue());
       RIAPUtils.exhaust(result);
     }
-  }
-
-  // ------------------------------------------------------------
-  // RESPONSE REPRESENTATION WRAPPING
-
-  /**
-   * REST API Response wrapper for single item expected.
-   * 
-   * @param media
-   *          MediaType expected
-   * @param representation
-   *          service response representation
-   * @param dataClass
-   *          class expected in the item property of the Response object
-   * @return Response the response.
-   */
-  public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass) {
-    return getResponse(media, representation, dataClass, false);
-  }
-
-  /**
-   * REST API Response Representation wrapper for single or multiple items expexted
-   * 
-   * @param media
-   *          MediaType expected
-   * @param representation
-   *          service response representation
-   * @param dataClass
-   *          class expected for items of the Response object
-   * @param isArray
-   *          if true wrap the data property else wrap the item property
-   * @return Response
-   */
-  public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
-    try {
-      if (!media.isCompatible(getMediaTest()) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
-        return null;
-      }
-
-      XStream xstream = XStreamFactory.getInstance().getXStreamReader(media);
-      xstream.autodetectAnnotations(false);
-      xstream.alias("response", Response.class);
-      xstream.alias("project", Project.class);
-      xstream.alias("dataset", Resource.class);
-      // xstream.alias("dataset", Resource.class);
-
-      if (isArray) {
-        xstream.addImplicitCollection(Response.class, "data", dataClass);
-      }
-      else {
-        xstream.alias("item", dataClass);
-        xstream.alias("item", Object.class, dataClass);
-
-        if (media.equals(MediaType.APPLICATION_JSON)) {
-          xstream.addImplicitCollection(Project.class, "dataSets", Resource.class);
-          xstream.aliasField("dataSets", Project.class, "dataSets");
-        }
-
-        if (dataClass == Project.class) {
-          xstream.aliasField("project", Response.class, "item");
-          // if (dataClass == DataSet.class)
-          // xstream.aliasField("dataset", Response.class, "item");
-        }
-      }
-      xstream.aliasField("data", Response.class, "data");
-
-      SitoolsXStreamRepresentation<Response> rep = new SitoolsXStreamRepresentation<Response>(representation);
-      rep.setXstream(xstream);
-
-      if (media.isCompatible(getMediaTest())) {
-        Response response = rep.getObject("response");
-
-        return response;
-      }
-      else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
-        return null; // TODO complete test with ObjectRepresentation
-      }
-    }
-    finally {
-      RIAPUtils.exhaust(representation);
-    }
-  }
-
-  /**
-   * Builds XML or JSON Representation of Project for Create and Update methods.
-   * 
-   * @param item
-   *          Project
-   * @param media
-   *          APPLICATION_XML or APPLICATION_JSON
-   * @return XML or JSON Representation
-   */
-  public static Representation getRepresentation(Project item, MediaType media) {
-    if (media.equals(MediaType.APPLICATION_JSON)) {
-      return new JsonRepresentation(item);
-    }
-    else if (media.equals(MediaType.APPLICATION_XML)) {
-      XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
-      XstreamRepresentation<Project> rep = new XstreamRepresentation<Project>(media, item);
-      configure(xstream);
-      rep.setXstream(xstream);
-      return rep;
-    }
-    else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
-      return null; // TODO complete test with ObjectRepresentation
-    }
-  }
-
-  /**
-   * Configures XStream mapping for Response object with Project content.
-   * 
-   * @param xstream
-   *          XStream
-   */
-  private static void configure(XStream xstream) {
-    xstream.autodetectAnnotations(false);
-    xstream.alias("response", Response.class);
-    xstream.alias("project", Project.class);
-    xstream.alias("dataset", Resource.class);
-    // xstream.addImplicitCollection(Project.class, "dataSets", "dataSets",
-    // Resource.class);
-    // xstream.aliasField("dataSets", Project.class, "dataSets");
-    // xstream.alias("image", Resource.class);
-    // xstream.addImplicitCollection(Project.class, "dataSets", Resource.class);
-    // xstream.aliasField("dataSets", Project.class, "dataSets");
-    // xstream.aliasField("image", Project.class, "image");
   }
 
 }

@@ -1,5 +1,5 @@
     /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -122,7 +122,7 @@ public final class MutliDsOsResource extends SitoolsResource {
     }
     else if (this.getReference().getBaseRef().toString().endsWith("suggest")) {
       this.fillOsMap();
-      repr = new MutliDsOsSuggestRepresentation(MediaType.APPLICATION_JSON, this);
+      repr = new MultiDsOsSuggestRepresentation(MediaType.APPLICATION_JSON, this);
 
     }
     return repr;

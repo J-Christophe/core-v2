@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -24,7 +24,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +32,8 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
@@ -314,7 +314,7 @@ public class NotificationTestCase extends AbstractSitoolsTestCase {
    *          Observable
    */
   public void observableCreate(RestletObservable item) {
-    Representation rep = new JsonRepresentation(item);
+    Representation rep = new JacksonRepresentation<RestletObservable>(item);
     ClientResource cr = new ClientResource(this.getBaseUrl());
     Representation result = cr.post(rep, MediaType.APPLICATION_JSON);
     assertTrue(cr.getStatus().isSuccess());
@@ -382,7 +382,7 @@ public class NotificationTestCase extends AbstractSitoolsTestCase {
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -414,7 +414,7 @@ public class NotificationTestCase extends AbstractSitoolsTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test for XML, Object
       }
     }

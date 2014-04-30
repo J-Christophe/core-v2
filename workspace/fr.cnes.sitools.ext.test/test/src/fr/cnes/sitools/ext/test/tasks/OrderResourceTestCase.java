@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.restlet.data.ChallengeResponse;
@@ -38,8 +37,9 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.ReferenceList;
+import org.restlet.engine.Engine;
 import org.restlet.engine.util.DateUtils;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -588,7 +588,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
     uds.setQuota((long) 1000000);
     us.setStorage(uds);
 
-    JsonRepresentation rep = new JsonRepresentation(us);
+    Representation rep = new JacksonRepresentation<UserStorage>(us);
 
     ClientResource cr = new ClientResource(getUserStorageUrl() + "/users");
     Representation result = cr.post(rep);
@@ -809,7 +809,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
    */
   private void postJSON() {
     // http://localhost:8182/sitools/userstorage/admin?filepath=%2Ftmp&filename=SvaRecordDefinitionFile.json
-    JsonRepresentation repr = new JsonRepresentation(urlFileContent);
+    Representation repr = new StringRepresentation(urlFileContent, MediaType.APPLICATION_JSON);
     String url = getBaseUrl() + settings.getString(Consts.APP_USERSTORAGE_USER_URL).replace("{identifier}", userLogin)
         + "/files?filename=SvaRecordDefinitionFile.json&filepath=%2Ftmp";
     ClientResource cr = new ClientResource(url);
@@ -856,7 +856,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
       Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -908,7 +908,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test with ObjectRepresentation
       }
     }
@@ -928,7 +928,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
    */
   public static Representation getRepresentation(TaskModel item, MediaType media) {
     if (media.equals(MediaType.APPLICATION_JSON)) {
-      return new JsonRepresentation(item);
+      return new JacksonRepresentation<TaskModel>(item);
     }
     else if (media.equals(MediaType.APPLICATION_XML)) {
       XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
@@ -938,7 +938,7 @@ public class OrderResourceTestCase extends AbstractTaskResourceTestCase {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }

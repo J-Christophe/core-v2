@@ -1,5 +1,5 @@
     /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
+import org.restlet.engine.Engine;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -49,7 +50,7 @@ import freemarker.template.TemplateException;
 public final class TemplateUtils {
 
   /** Logger used */
-  private static Logger logger = Logger.getLogger(TemplateUtils.class.getName());
+  private static Logger logger = Engine.getLogger(TemplateUtils.class.getName());
 
   /**
    * Private constructor for utility classes

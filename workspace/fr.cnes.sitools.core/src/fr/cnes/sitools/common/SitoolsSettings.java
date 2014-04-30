@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -916,6 +916,15 @@ public final class SitoolsSettings {
    */
   public void setCheckStores(boolean checkStores) {
     this.checkStores = checkStores;
+  }
+
+  /**
+   * Gets the admin mail.
+   * 
+   * @return the admin mail
+   */
+  public String getAdminMail() {
+    return getString("Starter.StatusService.CONTACT_MAIL", null);
   }
 
 }

@@ -1,5 +1,5 @@
-    /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -17,6 +17,9 @@
  * along with SITools2.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 package fr.cnes.sitools.security.filter;
+
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -59,13 +62,35 @@ public class IPBlackListFilter extends SecurityFilter {
   protected int beforeHandle(Request request, Response response) {
     int status = STOP;
 
+    if (super.beforeHandle(request, response) == STOP) {
+      return STOP;
+    }
+
     String clientip = getIpAddress(request);
-    status = ((ipContainer != null) && ipContainer.contains(clientip)) ? STOP : super.beforeHandle(request, response);
+    status = ((ipContainer != null) && ipContainer.contains(clientip)) ? STOP : CONTINUE;
     if (status == STOP) {
       response.setStatus(Status.CLIENT_ERROR_FORBIDDEN, "Your IP address was blacklisted");
-      getContext().getLogger().info("Security.filter.blacklist : " + clientip);
+      log(request, response, clientip);
     }
     return status;
+  }
+
+  /**
+   * Log.
+   * 
+   * @param request
+   *          the request
+   * @param clientip
+   *          the client ip
+   */
+  private void log(Request request, Response response, String clientip) {
+
+    String message = "Request to : " + request.getResourceRef().getPath()
+        + " forbidden, IP address:" + clientip + " is in blacklist";
+
+    LogRecord record = new LogRecord(Level.WARNING, message);
+    response.getAttributes().put("LOG_RECORD", record);
+
   }
 
   /**

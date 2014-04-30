@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -19,12 +19,10 @@
 package fr.cnes.sitools;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,8 +31,8 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Protocol;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -114,11 +112,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
   public void setUp() throws Exception {
 
     if (this.component == null) {
-      this.component = new Component();
-      this.component.getServers().add(Protocol.HTTP, getTestPort());
-      this.component.getClients().add(Protocol.HTTP);
-      this.component.getClients().add(Protocol.FILE);
-      this.component.getClients().add(Protocol.CLAP);
+      this.component = createTestComponent(settings);
 
       // Context
       Context ctx = this.component.getContext().createChildContext();
@@ -172,7 +166,9 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
   @Test
   public void testCRUDUsers() {
     createUser();
+
     retrieveUser();
+    retrieveUserThatDontExists();
     updateUser();
     deleteUser();
     createWadl(getBaseUrl(), "users_groups");
@@ -188,6 +184,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
     wait(10000);
     createGroup();
     retrieveGroup();
+    retrieveGroupThatDontExists();
     updateGroup();
     deleteGroup();
   }
@@ -275,13 +272,42 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
    */
   public void createUser() {
 
-    User myUser = new User("test-identifier", "mOtDePaSsE", "Prénom", "Nom", "m.gond@akka.eu");
+    User myUser = new User("test-identifier", "mOtDePaSsE1", "Prénom", "Nom", "m.gond@akka.eu");
     ClientResource crUsers = new ClientResource(getBaseUrl() + "/users");
     Representation result = null;
     try {
       result = crUsers.post(getRepresentationJSON(myUser));
       assertTrue(crUsers.getStatus().isSuccess());
       assertNotNull(result);
+      Response response = getResponse(MediaType.APPLICATION_JSON, result, User.class);
+      assertTrue(response.getMessage(), response.getSuccess());
+      assertNotNull(response.getItem());
+      User resultUser = (User) response.getItem();
+      assertEquals(resultUser.getIdentifier(), myUser.getIdentifier());
+      assertEquals(resultUser.getFirstName(), myUser.getFirstName());
+      assertEquals(resultUser.getLastName(), myUser.getLastName());
+      assertNull(resultUser.getSecret()); // secret is private
+      assertEquals(resultUser.getEmail(), myUser.getEmail());
+    }
+    finally {
+      if (result != null) {
+        RIAPUtils.exhaust(result);
+      }
+    }
+  }
+
+  /**
+   * Invoke GET
+   */
+  public void retrieveUser() {
+    User myUser = new User("test-identifier", "mOtDePaSsE1", "Prénom", "Nom", "m.gond@akka.eu");
+    ClientResource cr = new ClientResource(getBaseUrl() + "/users/" + myUser.getIdentifier());
+    Representation result = null;
+    try {
+      result = cr.get(MediaType.APPLICATION_JSON);
+      assertNotNull(result);
+      assertTrue(cr.getStatus().isSuccess());
+
       Response response = getResponse(MediaType.APPLICATION_JSON, result, User.class);
       assertTrue(response.getSuccess());
       assertNotNull(response.getItem());
@@ -302,9 +328,9 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
   /**
    * Invoke GET
    */
-  public void retrieveUser() {
-    User myUser = new User("test-identifier", "mOtDePaSsE", "Prénom", "Nom", "m.gond@akka.eu");
-    ClientResource cr = new ClientResource(getBaseUrl() + "/users/" + myUser.getIdentifier());
+  public void retrieveUserThatDontExists() {
+    String userId = "test-identifier-dont-exists";
+    ClientResource cr = new ClientResource(getBaseUrl() + "/users/" + userId);
     Representation result = null;
     try {
       result = cr.get(MediaType.APPLICATION_JSON);
@@ -312,14 +338,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
       assertTrue(cr.getStatus().isSuccess());
 
       Response response = getResponse(MediaType.APPLICATION_JSON, result, User.class);
-      assertTrue(response.getSuccess());
-      assertNotNull(response.getItem());
-      User resultUser = (User) response.getItem();
-      assertEquals(resultUser.getIdentifier(), myUser.getIdentifier());
-      assertEquals(resultUser.getFirstName(), myUser.getFirstName());
-      assertEquals(resultUser.getLastName(), myUser.getLastName());
-      assertNull(resultUser.getSecret()); // secret is private
-      assertEquals(resultUser.getEmail(), myUser.getEmail());
+      assertFalse(response.getMessage(), response.getSuccess());
     }
     finally {
       if (result != null) {
@@ -445,10 +464,10 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
    * 
    * @param bean
    *          User
-   * @return JsonRepresentation
+   * @return Representation
    */
   public static Representation getRepresentationJSON(User bean) {
-    return new JsonRepresentation(bean);
+    return new JacksonRepresentation<User>(bean);
   }
 
   /**
@@ -456,7 +475,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
    * 
    * @param bean
    *          User
-   * @return FormRepresentation
+   * @return Representation
    */
   public static Representation getRepresentationFORM(User bean) {
     // Form Representation
@@ -485,7 +504,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
       assertNotNull(result);
 
       Response response = getResponse(MediaType.APPLICATION_JSON, result, Group.class);
-      assertTrue(response.getSuccess());
+      assertTrue(response.getMessage(), response.getSuccess());
       assertNotNull(response.getItem());
 
       Group group = (Group) response.getItem();
@@ -518,6 +537,28 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
       Group group = (Group) response.getItem();
       assertEquals(group.getName(), myGroup.getName());
       assertEquals(group.getDescription(), myGroup.getDescription());
+    }
+    finally {
+      if (result != null) {
+        RIAPUtils.exhaust(result);
+      }
+    }
+  }
+
+  /**
+   * Invoke GET
+   */
+  public void retrieveGroupThatDontExists() {
+    String groupId = "test-groupName-dont-exists";
+    ClientResource cr = new ClientResource(getBaseUrl() + "/groups/" + groupId);
+    Representation result = null;
+    try {
+      result = cr.get(MediaType.APPLICATION_JSON);
+      assertNotNull(result);
+      assertTrue(cr.getStatus().isSuccess());
+
+      Response response = getResponse(MediaType.APPLICATION_JSON, result, Group.class);
+      assertFalse(response.getMessage(), response.getSuccess());
     }
     finally {
       if (result != null) {
@@ -595,10 +636,10 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
    * 
    * @param bean
    *          Group
-   * @return JsonRepresentation
+   * @return Representation
    */
   public static Representation getRepresentationJSON(Group bean) {
-    return new JsonRepresentation(bean);
+    return new JacksonRepresentation<Group>(bean);
   }
 
   /**
@@ -650,7 +691,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -687,7 +728,7 @@ public class UsersAndGroupsTestCase extends AbstractSitoolsTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON supported in tests");
         return null; // TODO complete test for XML, Object
       }
     }

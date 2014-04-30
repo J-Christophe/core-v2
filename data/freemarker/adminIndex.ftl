@@ -83,6 +83,7 @@
     <script type="text/javascript" src="${appUrl}/common/js/widgets/sliderRange/js/ux/SliderRange.js"></script>
     <script type="text/javascript" src="${appUrl}/common/js/userProfile/loginUtils.js"></script>
 	<script type="text/javascript" src="${appUrl}/common/js/userProfile/login.js"></script>	
+	<script type="text/javascript" src="${appUrl}/common/js/userProfile/lostPassword.js"></script>	
     <script type="text/javascript" src="${appUrl}/common/js/widgets/actionlink.js"></script>
     <script type="text/javascript" src="${appUrl}/common/js/widgets/highlighttext.js"></script>
     <script type="text/javascript" src="${appUrl}/common/js/widgets/checkcolumn.js"></script>
@@ -110,7 +111,6 @@
     <script type="text/javascript" src="${appUrl}/common/js/widgets/vtype.js"></script>
     <script type="text/javascript" src="${appUrl}/common/js/version/sitoolsVersion.js"></script>
 	<script type="text/javascript" src="${appUrl}/common/js/widgets/sitoolsDatePicker.js"></script>
-	
     
     <script type="text/javascript" src="js/def.js"></script>
     <script type="text/javascript" src="js/id.js"></script>
@@ -291,6 +291,9 @@
 	<script type="text/javascript" src="js/guiServices/guiServicesStore.js"></script>
 	
 	
+	<script type="text/javascript" src="js/usergroups/BlacklistedUsersPanel.js"></script>	
+	
+	
 	
 	
 <!-- END_JS_DEV_INCLUDES -->
@@ -323,13 +326,14 @@
 						Ext.QuickTips.init();
 						if (Ext.isEmpty(Ext.util.Cookies.get('userLogin'))) {
 							/*new sitools.userProfile.Login({
-			        			url:'${appUrl}/login',
+			        			url:'${appUrl}/authentication/login',
 			        			handler : initAppli
 			        		}).show();*/
 							sitools.userProfile.LoginUtils.connect({
-								url:'${appUrl}/login',
-			        			handler : initAppli
-							});
+								url:'${appUrl}/authentication/login',
+			        			handler : initAppli,
+								reset : loadUrl.get('APP_URL') + '/lostPassword',
+								unblacklist : loadUrl.get('APP_URL') + '/unblacklist'							});
 						}
 						else {
 							initAppli();

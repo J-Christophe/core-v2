@@ -1,5 +1,5 @@
- /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +34,8 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
@@ -238,7 +238,7 @@ public class OpenSearchTestCase extends AbstractSitoolsTestCase {
    *          DataSet
    */
   public void create(Opensearch item) {
-    JsonRepresentation rep = new JsonRepresentation(item);
+    Representation rep = getRepresentation(item);
     ClientResource cr = new ClientResource(String.format(getBaseUrl(), item.getId()));
     Representation result = cr.post(rep, MediaType.APPLICATION_JSON);
     assertTrue(cr.getStatus().isSuccess());
@@ -333,7 +333,7 @@ public class OpenSearchTestCase extends AbstractSitoolsTestCase {
    *          DataSet
    */
   public void update(Opensearch item) {
-    Representation rep = new JsonRepresentation(item);
+    Representation rep = getRepresentation(item);
 
     ClientResource cr = new ClientResource(String.format(getBaseUrl(), item.getId())); // +
                                                                                        // "/"
@@ -348,6 +348,18 @@ public class OpenSearchTestCase extends AbstractSitoolsTestCase {
     assertNotNull(response.getItem());
     Opensearch rs = (Opensearch) response.getItem();
     assertEqualsOpensearch(rs, item);
+  }
+
+  /**
+   * Get the Json representation of the Opensearch object
+   * 
+   * @param item
+   *          the opensearch object
+   * @return the json representation
+   */
+  private Representation getRepresentation(Opensearch item) {
+    Representation rep = new JacksonRepresentation<Opensearch>(item);
+    return rep;
   }
 
   /**
@@ -457,7 +469,7 @@ public class OpenSearchTestCase extends AbstractSitoolsTestCase {
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -498,7 +510,7 @@ public class OpenSearchTestCase extends AbstractSitoolsTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON is supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON is supported in tests");
         return null; // TODO complete test for XML, Object representation
       }
     }

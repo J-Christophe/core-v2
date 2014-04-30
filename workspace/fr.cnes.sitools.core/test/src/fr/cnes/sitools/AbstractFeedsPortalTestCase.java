@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -26,15 +26,14 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
+import org.restlet.engine.Engine;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -529,7 +528,7 @@ public abstract class AbstractFeedsPortalTestCase extends AbstractSitoolsServerT
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(getMediaTest()) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -574,7 +573,7 @@ public abstract class AbstractFeedsPortalTestCase extends AbstractSitoolsServerT
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test with ObjectRepresentation
       }
     }
@@ -582,25 +581,6 @@ public abstract class AbstractFeedsPortalTestCase extends AbstractSitoolsServerT
       RIAPUtils.exhaust(representation);
     }
   }
-
-  /**
-   * Builds XML or JSON Representation of Project for Create and Update methods.
-   * 
-   * @param item
-   *          Project
-   * @param media
-   *          APPLICATION_XML or APPLICATION_JSON
-   * @return XML or JSON Representation
-   */
-  /*
-   * public static Representation getRepresentation(FeedModel item, MediaType media) { if
-   * (media.equals(MediaType.APPLICATION_JSON)) { return new JsonRepresentation(item); } else if
-   * (media.equals(MediaType.APPLICATION_XML)) { XStream xstream = XStreamFactory.getInstance().getXStream(media,
-   * false); XstreamRepresentation<FeedModel> rep = new XstreamRepresentation<FeedModel>(media, item);
-   * configure(xstream); rep.setXstream(xstream); return rep; } else { Logger.getLogger(AbstractSitoolsTestCase
-   * .class.getName()).warning("Only JSON or XML supported in tests"); return null; // TODO complete test with
-   * ObjectRepresentation } }
-   */
 
   /**
    * Response to Representation
@@ -624,7 +604,7 @@ public abstract class AbstractFeedsPortalTestCase extends AbstractSitoolsServerT
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
 
     }
@@ -652,7 +632,7 @@ public abstract class AbstractFeedsPortalTestCase extends AbstractSitoolsServerT
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
 
     }

@@ -330,6 +330,7 @@
 				<exclude name=".*" />
 				<exclude name=".settings/" />
 				<exclude name="upload/" />
+				<exclude name="js/conf.json"/>
 			</fileset>
 			<file override="true" src="res/conf.json" targetdir="$INSTALL_PATH/workspace/mizar/app/js/" />
 			<file override="true" src="res/img/mizar.ico" targetdir="$INSTALL_PATH/workspace/mizar/app/css/" />

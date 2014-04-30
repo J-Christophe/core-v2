@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -131,6 +131,12 @@ sitools.admin.usergroups.UserCrudPanel = Ext.extend(Ext.grid.GridPanel, {
                 icon : loadUrl.get('APP_URL') + '/common/res/images/icons/toolbar_delete.png',
                 handler : this._onDelete,
                 xtype : 's-menuButton'
+            },
+             '|', {
+                text : i18n.get('title.blacklistedUsers'),
+                handler : this._onBlacklistedUsers,
+                xtype : 's-menuButton',
+                icon : loadUrl.get('APP_URL') + '/common/res/images/icons/locked_user.png.png'                
             }, '->', {
                 xtype : 's-filter',
                 emptyText : i18n.get('label.search'),
@@ -241,6 +247,12 @@ sitools.admin.usergroups.UserCrudPanel = Ext.extend(Ext.grid.GridPanel, {
             },
             failure : alertFailure
         });
+    },
+    _onBlacklistedUsers : function () {
+        var up = new sitools.admin.usergroups.BlacklistedUsersPanel({
+            url : loadUrl.get('APP_URL') + loadUrl.get('APP_USER_BLACKLIST_URL')
+        });
+        up.show(this);
     }
 
 });

@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.restlet.Component;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -167,7 +167,7 @@ public abstract class AbstractUsersAndGroupsTestCase extends AbstractSitoolsTest
    * Invoke POST
    */
   public void createUser() {
-    User myUser = new User("test-identifier", "mOtDePaSsE", "Prénom", "Nom", "m.gond@akka.eu");
+    User myUser = new User("test-identifier", "mOtDePaSsE1", "Prénom", "Nom", "m.gond@akka.eu");
     ClientResource crUsers = new ClientResource(getBaseUrl() + "/users");
 
     Representation result = crUsers.post(getRepresentationJSON(myUser));
@@ -249,10 +249,10 @@ public abstract class AbstractUsersAndGroupsTestCase extends AbstractSitoolsTest
    * 
    * @param bean
    *          User
-   * @return JsonRepresentation
+   * @return JacksonRepresentation
    */
   public static Representation getRepresentationJSON(User bean) {
-    return new JsonRepresentation(bean);
+    return new JacksonRepresentation<User>(bean);
   }
 
   /**
@@ -363,10 +363,10 @@ public abstract class AbstractUsersAndGroupsTestCase extends AbstractSitoolsTest
    * 
    * @param bean
    *          Group
-   * @return JsonRepresentation
+   * @return Representation
    */
   public static Representation getRepresentationJSON(Group bean) {
-    return new JsonRepresentation(bean);
+    return new JacksonRepresentation<Group>(bean);
   }
 
   /**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- =================================== == Copyright 2010-2013 CNES - CENTRE 
+<!-- =================================== == Copyright 2010-2014 CNES - CENTRE 
 	NATIONAL d'ETUDES SPATIALES == == This file is part of SITools2. == == SITools2 
 	is free software: you can redistribute it and/or modify == it under the terms 
 	of the GNU General Public License as published by == the Free Software Foundation, 
@@ -176,13 +176,13 @@
 	</target>
 
 	<target name="export-git" description="Tache GIT d'export de la version actuelle">
-		<exec executable="scripts/clone-tag.bat" osfamily="windows">
+		<exec executable="scripts/clone-tag.bat" osfamily="windows" failonerror="true">
 			<arg value="${url}"/>
 			<arg value="${dir}"/>
 			<arg value="${tag}"/>
 		</exec>
 
-		<exec executable="scripts/clone-tag.sh" osfamily="unix">
+		<exec executable="scripts/clone-tag.sh" osfamily="unix" failonerror="true">
 			<arg value="${url}"/>
 			<arg value="${dir}"/>
 			<arg value="${tag}"/>
@@ -526,13 +526,13 @@
 
 
 	<target name="file-list-git" description="Genere la liste des fichiers, le README et la liste des fichiers A/M/D">
-		<exec executable="scripts/diff-files.bat" osfamily="windows">
+		<exec executable="scripts/diff-files.bat" osfamily="windows" failonerror="true">
 			<arg value="${reference}"/>
 			<arg value="${tag}"/>
 			<arg value="${dir}"/>
 		</exec>
 		
-		<exec executable="scripts/diff-files.sh" osfamily="unix">
+		<exec executable="scripts/diff-files.sh" osfamily="unix" failonerror="true">
 			<arg value="${reference}"/>
 			<arg value="${tag}"/>
 			<arg value="${dir}"/>
@@ -780,10 +780,10 @@
 	
 	<!-- Supprime le texte de licence au début de chaque fichier -->
 	<target name="change_copyright" description="Change the copyright year values in all the files of the workspace">
-		<echo message="Replace 'Copyright 2011-2012 CNES' with 'Copyright 2010-2013 CNES'"></echo>
+		<echo message="Replace 'Copyright 2010-2014 CNES' with 'Copyright 2010-2014 CNES'"></echo>
 			<replace 
-	    		value="Copyright 2010-2013 CNES"
-				token="Copyright 2011-2012 CNES"
+	    		value="Copyright 2010-2014 CNES"
+				token="Copyright 2010-2014 CNES"
 	    		failOnNoReplacements="true"
 	    		summary="true"
 	    		encoding="ISO-8859-1">

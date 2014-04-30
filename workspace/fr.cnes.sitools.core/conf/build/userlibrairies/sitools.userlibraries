@@ -18,7 +18,7 @@
         <archive path="D:/CNES-ULISSE/cots/osgi/equinox/org.eclipse.osgi_3.6.0.v20100517.jar"/>
     </library>
     <library name="restlet_jse_2_0_5_patched" systemlibrary="false">
-        <archive path="D:/CNES-ULISSE/workspace/org.restlet.patched/org.restlet.patched_1.0.3.jar"/>
+        <archive path="D:/CNES-ULISSE/workspace/org.restlet.patched/org.restlet.patched_1.0.4.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.net.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.osgi_4.0/org.osgi.core.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.apache.commons.dbcp_1.3/org.apache.commons.dbcp.jar"/>
@@ -27,7 +27,6 @@
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.javamail.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.jackson.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/javax.mail_1.4/javax.mail.jar"/>
-        <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.json_2.0/org.json.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/com.thoughtworks.xstream_1.3/com.thoughtworks.xstream.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.codehaus.jettison_1.2/org.codehaus.jettison.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.apache.commons.fileupload_1.2/org.apache.commons.fileupload.jar"/>
@@ -39,7 +38,6 @@
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.atom.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.fileupload.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.jetty.jar"/>
-        <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.json.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.rome.jar"/>
         <archive path="D:/CNES-ULISSE/workspace/org.restlet.ext.wadl/org.restlet.ext.wadl_2.0.1.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.wadl.jar"/>
@@ -53,6 +51,7 @@
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/javax.servlet_2.5/javax.servlet.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.jdom_1.1/org.jdom.jar"/>
         <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.apache.commons.codec_1.4/org.apache.commons.codec.jar"/>
+        <archive path="D:/CNES-ULISSE/cots/restlet-2.0.5-patched/org.restlet.ext.slf4j.jar"/>
     </library>
     <library name="sitools_libraries" systemlibrary="false">
         <archive path="D:/CNES-ULISSE/workspace/libraries/org.apache.xalan_2.7.1/xml-apis.jar"/>

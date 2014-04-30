@@ -1,5 +1,5 @@
- /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+/*******************************************************************************
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -19,6 +19,9 @@
 package org.restlet.security;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.restlet.Request;
 import org.restlet.Response;
@@ -26,8 +29,8 @@ import org.restlet.Response;
 /**
  * FIXME RESTLET
  * 
- * Classe nécessairement dans le package org.restlet.security pour rendre publique la methode authorize et pour rendre serializable un
- * Authorizer
+ * Classe nécessairement dans le package org.restlet.security pour rendre publique la methode authorize et pour rendre
+ * serializable un Authorizer
  * 
  * @author jp.boignard (AKKA Technologies)
  * 
@@ -39,6 +42,9 @@ public class DelegatedAuthorizer extends Authorizer implements Serializable {
 
   /** Delegated Restlet authorizer */
   private Authorizer authorizer = null;
+
+  /** logger */
+  private Logger logger = null;
 
   /**
    * Constructor Authorizer encapsulation
@@ -80,5 +86,21 @@ public class DelegatedAuthorizer extends Authorizer implements Serializable {
   public void setAuthorizer(Authorizer authorizer) {
     this.authorizer = authorizer;
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.restlet.security.Authorizer#unauthorized(org.restlet.Request, org.restlet.Response)
+   */
+  @Override
+  protected int unauthorized(Request request, Response response) {
+    String message = "Request to: " + request.getResourceRef().getPath()
+          + " forbidden, authorization failed";
+
+    LogRecord record = new LogRecord(Level.WARNING, message);
+    response.getAttributes().put("LOG_RECORD", record);
+    return super.unauthorized(request, response);
+  }
+
 
 }

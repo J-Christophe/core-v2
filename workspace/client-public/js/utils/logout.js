@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -24,7 +24,9 @@ function utils_logout(reload) {
     Ext.util.Cookies.set('userLogin', '');
     Ext.util.Cookies.clear('userLogin');
     Ext.util.Cookies.set('hashCode', '');
-    Ext.Ajax.defaultHeaders.Authorization = '';
+    var date = new Date();
+    localStorage.removeItem("userSessionTimeOut");
+    Ext.destroyMembers(Ext.Ajax.defaultHeaders, "Authorization");
     if (reload) {
         window.location.reload();
     }	

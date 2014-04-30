@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -35,14 +35,10 @@ sitools.Portal = function (projectsList, languages, preferences) {
             handler : function () {
                 sitools.userProfile.LoginUtils.connect({
                     closable : true,
-                    url : loadUrl.get('APP_URL') + '/login',
+                    url : loadUrl.get('APP_URL') + loadUrl.get('APP_LOGIN_PATH_URL') + '/login',
                     register : loadUrl.get('APP_URL') + '/inscriptions/user',
-                    reset : loadUrl.get('APP_URL') + '/resetPassword',
-                    handler : function () {
-                        portal.initAppliPortal({
-                            siteMapRes : loadUrl.get('APP_URL') + loadUrl.get('APP_CLIENT_USER_URL')
-                        });
-                    }
+                    reset : loadUrl.get('APP_URL') + '/lostPassword',
+                    unblacklist : loadUrl.get('APP_URL') + '/unblacklist'
                 });
                 
                 
@@ -278,9 +274,10 @@ sitools.Portal = function (projectsList, languages, preferences) {
                 } else {
                 	sitools.userProfile.LoginUtils.connect({
                         closable : true,
-                        url : loadUrl.get('APP_URL') + '/login',
+                        url : loadUrl.get('APP_URL') + loadUrl.get('APP_LOGIN_PATH_URL') + '/login',
                         register : loadUrl.get('APP_URL') + '/inscriptions/user',
-                        reset : loadUrl.get('APP_URL') + '/resetPassword',
+                        reset : loadUrl.get('APP_URL') + '/lostPassword',
+                        unblacklist : loadUrl.get('APP_URL') + '/unblacklist',
                         handler : function () {
                         	if (!maintenance) {
                         		window.open(projectName + "/project-index.html");

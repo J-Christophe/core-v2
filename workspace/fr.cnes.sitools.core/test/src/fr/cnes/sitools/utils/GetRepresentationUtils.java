@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -18,11 +18,9 @@
  ******************************************************************************/
 package fr.cnes.sitools.utils;
 
-import java.util.logging.Logger;
-
 import org.restlet.data.MediaType;
+import org.restlet.engine.Engine;
 import org.restlet.ext.jackson.JacksonRepresentation;
-import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 
@@ -31,6 +29,7 @@ import com.thoughtworks.xstream.XStream;
 import fr.cnes.sitools.AbstractSitoolsServerTestCase;
 import fr.cnes.sitools.AbstractSitoolsTestCase;
 import fr.cnes.sitools.common.XStreamFactory;
+import fr.cnes.sitools.common.model.Resource;
 import fr.cnes.sitools.common.model.Response;
 import fr.cnes.sitools.dataset.converter.dto.ConverterModelDTO;
 import fr.cnes.sitools.dataset.model.DataSet;
@@ -39,6 +38,7 @@ import fr.cnes.sitools.plugins.guiservices.implement.model.GuiServicePluginModel
 import fr.cnes.sitools.plugins.resources.dto.ResourceModelDTO;
 import fr.cnes.sitools.plugins.resources.model.ResourceModel;
 import fr.cnes.sitools.plugins.resources.model.ResourceParameter;
+import fr.cnes.sitools.project.model.Project;
 import fr.cnes.sitools.role.model.Role;
 import fr.cnes.sitools.security.model.Group;
 import fr.cnes.sitools.security.model.User;
@@ -66,7 +66,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -100,7 +100,7 @@ public class GetRepresentationUtils {
    */
   public static Representation getRepresentationDicoMapping(DictionaryMapping item, MediaType media) {
     if (media.equals(MediaType.APPLICATION_JSON)) {
-      return new JsonRepresentation(item);
+      return new JacksonRepresentation<DictionaryMapping>(item);
     }
     else if (media.equals(MediaType.APPLICATION_XML)) {
       XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
@@ -110,7 +110,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -150,7 +150,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -191,7 +191,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -235,7 +235,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null;
       // TODO complete test with ObjectRepresentation
     }
@@ -278,7 +278,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -292,7 +292,7 @@ public class GetRepresentationUtils {
   private static void configureUser(XStream xstream) {
     xstream.autodetectAnnotations(false);
     xstream.alias("response", Response.class);
-    xstream.alias("user", User.class);
+    // xstream.alias("user", User.class);
   }
 
   // ------------------------------------------------------------
@@ -319,7 +319,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -350,7 +350,7 @@ public class GetRepresentationUtils {
    */
   public static Representation getRepresentationRole(Role item, MediaType media) {
     if (media.equals(MediaType.APPLICATION_JSON)) {
-      return new JsonRepresentation(item);
+      return new JacksonRepresentation<Role>(item);
     }
     else if (media.equals(MediaType.APPLICATION_XML)) {
       XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
@@ -360,7 +360,7 @@ public class GetRepresentationUtils {
       return rep;
     }
     else {
-      Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
       return null; // TODO complete test with ObjectRepresentation
     }
   }
@@ -374,6 +374,54 @@ public class GetRepresentationUtils {
   private static void configureRole(XStream xstream) {
     xstream.autodetectAnnotations(false);
     xstream.alias("role", Role.class);
+  }
+
+  // -----------------------------------------------------------
+  // PROJECT
+  /**
+   * Builds XML or JSON Representation of Project for Create and Update methods.
+   * 
+   * @param item
+   *          Project
+   * @param media
+   *          APPLICATION_XML or APPLICATION_JSON
+   * @return XML or JSON Representation
+   */
+  public static Representation getRepresentationProject(Project item, MediaType media) {
+    if (media.equals(MediaType.APPLICATION_JSON)) {
+      return new JacksonRepresentation<Project>(item);
+    }
+    else if (media.equals(MediaType.APPLICATION_XML)) {
+      XStream xstream = XStreamFactory.getInstance().getXStream(media, false);
+      XstreamRepresentation<Project> rep = new XstreamRepresentation<Project>(media, item);
+      configureProject(xstream);
+      rep.setXstream(xstream);
+      return rep;
+    }
+    else {
+      Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+      return null; // TODO complete test with ObjectRepresentation
+    }
+  }
+
+  /**
+   * Configures XStream mapping for Response object with Project content.
+   * 
+   * @param xstream
+   *          XStream
+   */
+  private static void configureProject(XStream xstream) {
+    xstream.autodetectAnnotations(false);
+    xstream.alias("response", Response.class);
+    xstream.alias("project", Project.class);
+    xstream.alias("dataset", Resource.class);
+    // xstream.addImplicitCollection(Project.class, "dataSets", "dataSets",
+    // Resource.class);
+    // xstream.aliasField("dataSets", Project.class, "dataSets");
+    // xstream.alias("image", Resource.class);
+    // xstream.addImplicitCollection(Project.class, "dataSets", Resource.class);
+    // xstream.aliasField("dataSets", Project.class, "dataSets");
+    // xstream.aliasField("image", Project.class, "image");
   }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -394,6 +394,12 @@ public abstract class AbstractOrderResource extends SitoolsParameterizedResource
     root.put("order", order);
     String adminmail = settings.getString("Starter.StatusService.CONTACT_MAIL");
     root.put("adminmail", adminmail);
+    root.put("user", userDetails);
+    root.put("task", task);
+    root.put(
+        "sitoolsUrl",
+        getSettings().getPublicHostDomain() + settings.getString(Consts.APP_URL)
+            + settings.getString(Consts.APP_CLIENT_USER_URL) + "/");
 
     TemplateUtils.describeObjectClassesForTemplate(templatePath, root);
 
@@ -414,7 +420,7 @@ public abstract class AbstractOrderResource extends SitoolsParameterizedResource
    * @return the mail subject
    */
   protected String getMailSubject() {
-    return "[SITools order] " + order.getDescription() + " " + order.getStatus();
+    return "SITools2 - Order " + order.getDescription() + " " + order.getStatus();
   }
 
   /**

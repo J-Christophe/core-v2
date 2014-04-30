@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -23,7 +23,7 @@
  * http://www.extjs.com/license
  */
 
-/*global Ext, i18n, date, Digest, sql2ext, SitoolsDesk, loadUrl, sitools, showResponse, ColumnRendererEnum, document*/
+/*global Ext, i18n, date, Digest, sql2ext, SitoolsDesk, loadUrl, sitools, showResponse, ColumnRendererEnum, document, localStorage, SITOOLS_DATE_FORMAT, window*/
 
 // GLOBAL BEHAVIOUR
 var DEFAULT_NATIVEJSON = false; //must be set to false to constrain Ext.doEncode (if true, doesn't work with prototype library)
@@ -91,18 +91,59 @@ var onBeforeRequest = function (conn, options) {
 					Authorization : Ext.util.Cookies.get('hashCode')
 		        });
 		    } else {
-		        Ext.apply(Ext.Ajax.defaultHeaders, {
-                    Authorization : ''
-                });
+		        Ext.destroyMembers(Ext.Ajax.defaultHeaders, "Authorization");
 		    }
 		}
     }
     if (!Ext.isEmpty(Ext.util.Cookies.get('userLogin'))) {
-        Ext.util.Cookies.set('userLogin', Ext.util.Cookies.get('userLogin'), date.add(Date.MINUTE, COOKIE_DURATION));
+        var expireDate = date.add(Date.MINUTE, COOKIE_DURATION);
+        Ext.util.Cookies.set('userLogin', Ext.util.Cookies.get('userLogin'), expireDate);
+        
+        taskCheckSessionExpired.cancel();
+        taskCheckSessionExpired.delay(COOKIE_DURATION * 1000 * 60);
+        
+        //use localstorage to store sessionsTime out
+        localStorage.setItem("userSessionTimeOut", expireDate.format(SITOOLS_DATE_FORMAT));
+        Ext.EventManager.un(window, "storage");
+        Ext.EventManager.on(window, "storage", function() {
+            if (Ext.isEmpty(localStorage.getItem("userSessionTimeOut"))) {
+                checkSessionExpired();                
+            }
+        });
     }
 };
 
 Ext.Ajax.on('beforerequest', onBeforeRequest, this);
+
+/**
+ * HANDLE SESSION TIMEOUT
+ */
+
+var checkSessionExpired = function () {
+    
+    taskCheckSessionExpired.cancel();
+    
+    if (Ext.isEmpty(Ext.util.Cookies.get('userLogin'))) {
+     // Notify user its session timed out.
+        Ext.Msg.alert(
+                i18n.get('title.session.expired'),
+                i18n.get("label.session.expired"),
+                function (btn, text) {
+                    window.location.reload();
+                }
+        );
+    } else {
+        //extend the timer for the remaining session time
+        var expire = localStorage.getItem("userSessionTimeOut");
+        var date = new Date();
+        var expireDate = Date.parseDate(expire, SITOOLS_DATE_FORMAT);
+        
+        var sessionTimeLeftMs = (expireDate.getTime() - date.getTime()) + 1000;
+        taskCheckSessionExpired.delay(sessionTimeLeftMs);
+    }
+};
+
+var taskCheckSessionExpired = new Ext.util.DelayedTask(checkSessionExpired);
 
 var DEFAULT_LOCALE = "en";
 var SITOOLS_DATE_FORMAT = 'Y-m-d\\TH:i:s.u';
@@ -1283,7 +1324,7 @@ Ext.override(Ext.Window, {
         //resize windows to fit desktop
         var vs = this.container.getViewSize(false);
         var winSize = this.getSize();
-        var winPos = this.getPosition()
+        var winPos = this.getPosition();
         
         var outputWinSize = winSize;
         var outputWinPos = winPos;

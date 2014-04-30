@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -19,10 +19,12 @@
 package fr.cnes.sitools.server;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.restlet.Application;
 import org.restlet.Client;
@@ -35,15 +37,18 @@ import org.restlet.Server;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
+import org.restlet.engine.Engine;
 import org.restlet.ext.solr.SolrClientHelper;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Filter;
 import org.restlet.routing.VirtualHost;
 import org.restlet.service.LogService;
+import org.restlet.service.Service;
 
 import fr.cnes.sitools.applications.AdministratorApplication;
 import fr.cnes.sitools.applications.ClientAdminApplication;
 import fr.cnes.sitools.applications.ClientUserApplication;
+import fr.cnes.sitools.applications.LoginApplication;
 import fr.cnes.sitools.applications.OrdersFilesApplication;
 import fr.cnes.sitools.applications.PublicApplication;
 import fr.cnes.sitools.applications.TemporaryFolderApplication;
@@ -91,7 +96,9 @@ import fr.cnes.sitools.inscription.InscriptionApplication;
 import fr.cnes.sitools.inscription.UserInscriptionApplication;
 import fr.cnes.sitools.inscription.model.Inscription;
 import fr.cnes.sitools.logging.LogDataServerService;
+import fr.cnes.sitools.logging.LoggingOutputStream;
 import fr.cnes.sitools.logging.SitoolsApplicationLogFilter;
+import fr.cnes.sitools.logging.SitoolsLogFilter;
 import fr.cnes.sitools.mail.MailAdministration;
 import fr.cnes.sitools.notification.NotificationApplication;
 import fr.cnes.sitools.notification.business.NotificationManager;
@@ -131,7 +138,11 @@ import fr.cnes.sitools.security.authentication.SitoolsRealm;
 import fr.cnes.sitools.security.authorization.AuthorizationApplication;
 import fr.cnes.sitools.security.authorization.AuthorizationStore;
 import fr.cnes.sitools.security.captcha.CaptchaContainer;
+import fr.cnes.sitools.security.challenge.ChallengeToken;
+import fr.cnes.sitools.security.challenge.ChallengeTokenContainer;
 import fr.cnes.sitools.security.ssl.SslFactory;
+import fr.cnes.sitools.security.userblacklist.UserBlackListApplication;
+import fr.cnes.sitools.security.userblacklist.UserBlackListModel;
 import fr.cnes.sitools.service.storage.DataStorageStore;
 import fr.cnes.sitools.service.storage.StorageAdministration;
 import fr.cnes.sitools.service.storage.StorageApplication;
@@ -257,7 +268,9 @@ public final class Starter {
       System.err.println("SERVER ALREADY STARTED");
       System.exit(-1);
     }
-
+    // Engine.getInstance().setLoggerFacade(new Slf4jLoggerFacade());
+    // System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
+    //
     // ============================
     // Sitools settings
     SitoolsSettings settings = SitoolsSettings.getInstance(BUNDLE, Starter.class.getClassLoader(), Locale.FRANCE, true);
@@ -266,11 +279,17 @@ public final class Starter {
     hostPort = ((hostPort != null) && !hostPort.equals("")) ? hostPort : SitoolsSettings.DEFAULT_HOST_PORT;
 
     // ============================
-    // Create a component
-    Component component = new SitoolsComponent(settings);
-
-    // ============================
     // Logging configuration
+    String loggerFacade = settings.getString("Starter.org.restlet.engine.loggerFacadeClass", null);
+    if (loggerFacade != null && !loggerFacade.isEmpty()) {
+      System.setProperty("org.restlet.engine.loggerFacadeClass", loggerFacade);
+      // redirect standard Error and standard Out to a specific logger
+      System.setErr(new PrintStream(new LoggingOutputStream(Engine.getLogger("fr.cnes.sitools.stderr"), Level.WARNING),
+          true));
+      System.setOut(new PrintStream(new LoggingOutputStream(Engine.getLogger("fr.cnes.sitools.stdout"), Level.INFO),
+          true));
+
+    }
 
     String logConfigFile = settings.getRootDirectory() + settings.getString("Starter.Logging.configFile");
     File loggingConfigFile = new File(logConfigFile);
@@ -282,26 +301,29 @@ public final class Starter {
     }
 
     // ============================
+    // Create a component
+    Component component = new SitoolsComponent(settings);
+
+    // ============================
     // Logs access
 
-    String logOutputFile = settings.getRootDirectory() + settings.getString("Starter.LogService.outputFile");
-    String logLevelName = settings.getString("Starter.LogService.levelName");
-    String logFormat = settings.getString("Starter.LogService.logFormat");
+    // String logOutputFile = settings.getRootDirectory() + settings.getString("Starter.LogService.outputFile");
+    // String logLevelName = settings.getString("Starter.LogService.levelName");
+    // String logFormat = settings.getString("Starter.LogService.logFormat");
     String logName = settings.getString("Starter.LogService.logName");
     boolean logActive = Boolean.parseBoolean(settings.getString("Starter.LogService.active"));
 
-    LogService logService = new LogDataServerService(logOutputFile, logLevelName, logFormat, logName, logActive);
+    LogService logService = new LogDataServerService(logName, logActive);
 
     component.setLogService(logService);
 
-    String appLogOutputFile = settings.getRootDirectory() + settings.getString("Starter.AppLogService.outputFile");
-    String appLogLevelName = settings.getString("Starter.AppLogService.levelName");
-    String appLogFormat = settings.getString("Starter.AppLogService.logFormat");
+    // String appLogOutputFile = settings.getRootDirectory() + settings.getString("Starter.AppLogService.outputFile");
+    // String appLogLevelName = settings.getString("Starter.AppLogService.levelName");
+    // String appLogFormat = settings.getString("Starter.AppLogService.logFormat");
     String appLogName = settings.getString("Starter.AppLogService.logName");
     boolean appLogActive = Boolean.parseBoolean(settings.getString("Starter.AppLogService.active"));
 
-    LogService logServiceApplication = new LogDataServerService(appLogOutputFile, appLogLevelName, appLogFormat,
-        appLogName, appLogActive) {
+    LogService logServiceApplication = new LogDataServerService(appLogName, appLogActive) {
       /*
        * (non-Javadoc)
        * 
@@ -313,6 +335,21 @@ public final class Starter {
       }
     };
     component.getServices().add(logServiceApplication);
+
+    final String securityLoggerName = settings.getString("Starter.SecurityLogName");
+
+    Service logServiceSecurity = new LogService(true) {
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.restlet.service.LogService#createInboundFilter(org.restlet.Context)
+       */
+      @Override
+      public Filter createInboundFilter(Context context) {
+        return new SitoolsLogFilter(securityLoggerName);
+      }
+    };
+    component.getServices().add(logServiceSecurity);
 
     // ============================
     // Protocols
@@ -557,6 +594,26 @@ public final class Starter {
     appManager.attachApplication(logApp);
 
     // -------------------------
+    // Login application (commons)
+
+    // Reference
+    appReference = baseUrl + settings.getString(Consts.APP_LOGIN_PATH_URL);
+
+    // Context
+    appContext = host.getContext().createChildContext();
+    appContext.getAttributes().put(ContextAttributes.SETTINGS, settings);
+    appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
+    appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
+
+    // Application
+    LoginApplication loginApp = new LoginApplication(appContext);
+
+    // Attachment
+    appManager.attachApplication(loginApp);
+
+    component.getInternalRouter().attach(settings.getString(Consts.APP_LOGIN_PATH_URL), loginApp);
+
+    // -------------------------
     // Client-public application (commons)
 
     // Directory
@@ -567,6 +624,15 @@ public final class Starter {
     appReference = baseUrl + settings.getString(Consts.APP_CLIENT_PUBLIC_URL);
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
+
+    long cacheTime = settings.getLong("Security.challenge.cacheTime");
+    long cacheSize = settings.getLong("Security.challenge.cacheSize");
+    
+    
+    CaptchaContainer captchaContainer = new CaptchaContainer();
+    appContext.getAttributes().put("Security.Captcha.CaptchaContainer", captchaContainer);
+    ChallengeToken challengeTokenContainer = new ChallengeTokenContainer(cacheTime, cacheSize);
+    appContext.getAttributes().put("Security.challenge.ChallengeTokenContainer", challengeTokenContainer);
 
     // Application
     PublicApplication publicApp = new PublicApplication(appContext, publicAppPath, baseRef + appReference);
@@ -666,7 +732,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, storeIns);
 
-    CaptchaContainer captchaContainer = new CaptchaContainer();
+    captchaContainer = new CaptchaContainer();
     appContext.getAttributes().put("Security.Captcha.CaptchaContainer", captchaContainer);
 
     // Application publique pour pouvoir s'enregistrer
@@ -693,9 +759,8 @@ public final class Starter {
 
     // Attachment
     appManager.attachApplication(roleApplication);
-    
-    component.getInternalRouter().attach(settings.getString(Consts.APP_ROLES_URL), roleApplication);
 
+    component.getInternalRouter().attach(settings.getString(Consts.APP_ROLES_URL), roleApplication);
 
     // ===========================================================================
     // Gestion des datasouces jdbc
@@ -885,6 +950,7 @@ public final class Starter {
 
     appContext.getAttributes().put(Consts.APP_STORE_TASK, taskModelStore);
     appContext.getAttributes().put(Consts.APP_STORE_PLUGINS_RESOURCES, resPlugStore);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "project");
 
     // Application
     ResourcePluginApplication resourcePluginApp = new ResourcePluginApplication(appContext);
@@ -913,6 +979,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, resPlugStore);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "dataset");
 
     // Application
     ResourcePluginApplication resourcePluginAppOnDataset = new ResourcePluginApplication(appContext);
@@ -936,6 +1003,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, resPlugStore);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "application");
 
     // Application
     ResourcePluginApplication resourcePluginAppOnApp = new ResourcePluginApplication(appContext);
@@ -1268,6 +1336,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, storeFeeds);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "project");
 
     // Application
     FeedsApplication feedsProjectsApp = new FeedsApplication(appContext, storeFeeds) {
@@ -1294,6 +1363,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, storeFeeds);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "dataset");
 
     // Application
     FeedsApplication feedsDataSetsApp = new FeedsApplication(appContext, storeFeeds) {
@@ -1320,6 +1390,7 @@ public final class Starter {
     appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
     appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
     appContext.getAttributes().put(ContextAttributes.APP_STORE, storeFeeds);
+    appContext.getAttributes().put("TRACE_PARENT_TYPE", "portal");
 
     // Application
     FeedsApplication feedsPortalApp = new FeedsApplication(appContext, storeFeeds) {
@@ -1990,6 +2061,34 @@ public final class Starter {
     component.getInternalRouter().attach(
         settings.getString(Consts.APP_DATASETS_URL) + "/{parentId}" + settings.getString(Consts.APP_SERVICES_URL),
         servicesApplication);
+
+    // ===========================================================================
+    // Gestion des utilisateurs blacklistés
+
+    // Store
+    SitoolsStore<UserBlackListModel> storeUserBlackListModel = (SitoolsStore<UserBlackListModel>) settings.getStores()
+        .get(Consts.APP_STORE_USER_BLACKLIST);
+
+    // Reference
+    appReference = baseUrl + settings.getString(Consts.APP_USER_BLACKLIST_URL);
+
+    // Context
+    appContext = host.getContext().createChildContext();
+    appContext.getAttributes().put(ContextAttributes.SETTINGS, settings);
+    appContext.getAttributes().put(ContextAttributes.APP_ATTACH_REF, appReference);
+    appContext.getAttributes().put(ContextAttributes.APP_REGISTER, true);
+    appContext.getAttributes().put(ContextAttributes.APP_STORE, storeUserBlackListModel);
+
+    // Application
+    UserBlackListApplication userBlackListApplication = new UserBlackListApplication(appContext);
+
+    // Attachment
+    appManager.attachApplication(userBlackListApplication);
+
+    component.getInternalRouter().attach(settings.getString(Consts.APP_USER_BLACKLIST_URL), userBlackListApplication);
+
+    // END OF APPLICATION ATTACHMENT
+    // ===========================================================================
 
     // Attachement of the appManager to have the security configured properly
     appManager.attachApplication(appManager);

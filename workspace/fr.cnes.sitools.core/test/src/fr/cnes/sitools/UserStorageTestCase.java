@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -33,7 +32,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
@@ -352,7 +352,7 @@ public class UserStorageTestCase extends AbstractSitoolsServerTestCase {
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -380,7 +380,7 @@ public class UserStorageTestCase extends AbstractSitoolsServerTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test for XML, Object
       }
     }
@@ -410,7 +410,7 @@ public class UserStorageTestCase extends AbstractSitoolsServerTestCase {
    * @return Representation UserStorage representation
    */
   private Representation createUserStorage(UserStorage userStorage) {
-    JsonRepresentation rep = new JsonRepresentation(userStorage);
+    Representation rep = new JacksonRepresentation<UserStorage>(userStorage);
     ClientResource cr = new ClientResource(getBaseUrl() + ROOT_ADMIN);
     Representation result = cr.post(rep, getMediaTest());
     assertTrue(cr.getStatus().isSuccess());

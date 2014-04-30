@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.restlet.Request;
+import org.restlet.engine.Engine;
 import org.restlet.ext.wadl.ParameterInfo;
 import org.restlet.ext.wadl.ParameterStyle;
 
@@ -46,7 +47,7 @@ import fr.cnes.sitools.dataset.model.Predicat;
 public class LoggingFilter extends AbstractFilter {
 
   /** Class logger */
-  private static final Logger LOGGER = Logger.getLogger(LoggingFilter.class.getName());
+  private static final Logger LOGGER = Engine.getLogger(LoggingFilter.class.getName());
 
   /**
    * Default constructor

@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -60,7 +60,7 @@ public abstract class AbstractSitoolsServerTestCase {
   /**
    * Class logger
    */
-  public static final Logger LOGGER = Logger.getLogger(AbstractSitoolsServerTestCase.class.getName());
+  public static final Logger LOGGER = Engine.getLogger(AbstractSitoolsServerTestCase.class.getName());
 
   /**
    * BASE URL of global Sitools application
@@ -150,7 +150,7 @@ public abstract class AbstractSitoolsServerTestCase {
       FileUtils.cleanDirectory(dir, new String[] { "xml" }, false);
     }
     catch (IOException e) {
-      Logger.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning(
+      Engine.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning(
           "Unable to clean " + dir.getPath() + "\n cause:" + e.getMessage());
     }
   }
@@ -172,7 +172,7 @@ public abstract class AbstractSitoolsServerTestCase {
       FileUtils.cleanDirectory(dir, new String[] {}, false);
     }
     catch (IOException e) {
-      Logger.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning(
+      Engine.getLogger(AbstractSitoolsServerTestCase.class.getName()).warning(
           "Unable to clean " + dir.getPath() + "\n cause:" + e.getMessage());
     }
   }

@@ -1,5 +1,5 @@
  /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -23,9 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,9 +31,9 @@ import org.junit.Test;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
@@ -116,14 +114,10 @@ public class FormDTOTestCase extends AbstractSitoolsTestCase {
    */
   public void setUp() throws Exception {
     
-
+    SitoolsSettings settings = SitoolsSettings.getInstance();
     if (this.component == null) {
-      this.component = new Component();
-      this.component.getServers().add(Protocol.HTTP, getTestPort());
-      this.component.getClients().add(Protocol.HTTP);
-      this.component.getClients().add(Protocol.FILE);
-      this.component.getClients().add(Protocol.CLAP);
-
+      this.component = createTestComponent(settings);
+      
       // Context
       Context ctx = this.component.getContext().createChildContext();
       ctx.getAttributes().put(ContextAttributes.SETTINGS, SitoolsSettings.getInstance());
@@ -242,7 +236,7 @@ public class FormDTOTestCase extends AbstractSitoolsTestCase {
    */
   public void create(FormDTO item) {
 
-    Representation rep = new JsonRepresentation(item);
+    Representation rep = new JacksonRepresentation<FormDTO>(item);
     ClientResource cr = new ClientResource(String.format(getBaseUrl(), dataSetId));
 
     Representation result = cr.post(rep, MediaType.APPLICATION_JSON);
@@ -315,7 +309,7 @@ public class FormDTOTestCase extends AbstractSitoolsTestCase {
    *          FormDTO
    */
   public void update(FormDTO item) {
-    Representation rep = new JsonRepresentation(item);
+    Representation rep = new JacksonRepresentation<FormDTO>(item);
     ClientResource cr = new ClientResource(String.format(getBaseUrl(), dataSetId) + "/" + item.getId());
     Representation result = cr.put(rep, MediaType.APPLICATION_JSON);
     assertNotNull(result);
@@ -404,7 +398,7 @@ public class FormDTOTestCase extends AbstractSitoolsTestCase {
   public static Response getResponse(MediaType media, Representation representation, Class<?> dataClass, boolean isArray) {
     try {
       if (!media.isCompatible(MediaType.APPLICATION_JSON) && !media.isCompatible(MediaType.APPLICATION_XML)) {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null;
       }
 
@@ -455,7 +449,7 @@ public class FormDTOTestCase extends AbstractSitoolsTestCase {
         return response;
       }
       else {
-        Logger.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
+        Engine.getLogger(AbstractSitoolsTestCase.class.getName()).warning("Only JSON or XML supported in tests");
         return null; // TODO complete test for XML, Object
       }
     }

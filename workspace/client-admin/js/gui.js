@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -485,7 +485,6 @@ var clientAdmin = {
  * Init application Gui and logic
  */
 function initAppli() {
-    
     //loadUrl.load('/sitools/client-admin/siteMap', clientAdmin.initGui());
     if (Ext.isEmpty(Ext.util.Cookies.get('showQuickStart'))) {
         Ext.util.Cookies.set('showQuickStart', true);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -33,9 +33,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.ext.wadl.MethodInfo;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.Get;
 import org.w3c.dom.Document;
@@ -205,10 +205,10 @@ public class CartResource extends SitoolsParameterizedResource {
     }
     catch (Exception e) {
       e.printStackTrace();
-      return new JsonRepresentation("label.download_ko");
+      return new StringRepresentation("label.download_ko");
     }
 
-    return new JsonRepresentation("label.download_ok");
+    return new StringRepresentation("label.download_ok");
 
   }
 

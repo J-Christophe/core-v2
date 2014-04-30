@@ -1,5 +1,5 @@
     /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.engine.Engine;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.persistence.FilePersistenceStrategy;
@@ -80,7 +81,7 @@ public abstract class Paginable<E extends IResource> {
    */
   public Paginable(File location, Context context) {
     super();
-    log = Logger.getLogger(this.getClass().getName());
+    log = Engine.getLogger(this.getClass().getName());
     this.context = context;
     init(location);
   }

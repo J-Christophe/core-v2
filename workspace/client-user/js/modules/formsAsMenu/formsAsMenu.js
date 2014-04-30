@@ -1,5 +1,5 @@
 /***************************************
-* Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+* Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
 * 
 * This file is part of SITools2.
 * 
@@ -323,7 +323,13 @@ sitools.user.modules.formsAsMenu.openModule = function (btn, event) {
     if (Ext.isEmpty(menu)) {
 	   menu = new sitools.user.modules.formsAsMenu();
     }
-	menu.showAt([btn.getPosition()[0], SitoolsDesk.getEnteteEl().getHeight()]);
+    if (btn.getPosition) {
+    	menu.showAt([btn.getPosition()[0], SitoolsDesk.getEnteteEl().getHeight()]);
+    }
+    else 
+    {
+    	menu.showAt([0, SitoolsDesk.getEnteteEl().getHeight()]);
+   	}
 };
 
 sitools.user.modules.formsAsMenu.getStaticParameters = function () {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2010-2013 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
+ * Copyright 2010-2014 CNES - CENTRE NATIONAL d'ETUDES SPATIALES
  *
  * This file is part of SITools2.
  *
@@ -38,7 +38,6 @@ import org.restlet.representation.Representation;
 
 //import com.ice.tar.TarEntry;
 //import com.ice.tar.TarOutputStream;
-
 import fr.cnes.sitools.common.exception.SitoolsException;
 import fr.cnes.sitools.resources.order.utils.ListReferencesAPI;
 import fr.cnes.sitools.resources.order.utils.OrderResourceUtils;
