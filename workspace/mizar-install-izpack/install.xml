@@ -25,7 +25,7 @@
 	<jar src="lib/hsqldb.jar" />
 	<info>
 		<appname>Mizar</appname>
-		<appversion>1.0</appversion>
+		<appversion>1.0.1</appversion>
 		<authors>
 			<author email="jean-christophe.malapert@cnes.fr" name="CNES" />
                         <author email="fabien.lavignotte@telespazio.com" name="Telespazio France" />
@@ -150,7 +150,7 @@
 			<fileset override="update" dir="../libraries" targetdir="$INSTALL_PATH/$libraries" includes="**/*.jar" />
 			<fileset override="update" dir="../org.restlet.ext.solr/" targetdir="$INSTALL_PATH/$workspacePath/org.restlet.ext.solr"
 				includes="**/*.jar" />
-			<file override="update" src="../org.restlet.patched/org.restlet.patched_1.0.3.jar"
+			<file override="update" src="../org.restlet.patched/org.restlet.patched_1.0.4.jar"
 				targetdir="$INSTALL_PATH/workspace/org.restlet.patched" />
 			<file override="update" src="../org.restlet.ext.wadl/org.restlet.ext.wadl_2.0.1.jar"
 				targetdir="$INSTALL_PATH/workspace/org.restlet.ext.wadl" />

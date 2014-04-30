@@ -37,7 +37,7 @@ GOTO :EOF
 :NOERROR
 
 :: Lancement de JAVA
-SET ARGS=-Xms256m -Xmx512m -Djava.net.preferIPv4Stack=true -Djava.util.logging.config.file=%sitoolsCore%/conf/properties/sitools-logging.properties -Dfile.encoding=utf-8
+SET ARGS=-Xms256m -Xmx512m -Djava.net.preferIPv4Stack=true -Dfile.encoding=utf-8
 IF "%1"=="--tests" GOTO tests
 	::List of parameters to pass to the java program
 	SET PROGRAM_PARAMS=%1

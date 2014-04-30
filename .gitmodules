@@ -1,3 +1,6 @@
 [submodule "workspace/client-user/js/modules/mizarModule"]
 	path = workspace/client-user/js/modules/mizarModule
 	url = https://github.com/SITools2/RTWeb3D.git
+[submodule "workspace/Astronomy-Extension"]
+	path = workspace/Astronomy-Extension
+	url = https://github.com/SITools2/Astronomy-Extension-v2.git

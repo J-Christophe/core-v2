@@ -53,7 +53,7 @@ if [ -f ${LOG_DIR}/${prog}.run ];then
     \rm ${LOG_DIR}/${prog}.run
 fi
 
-ARGS="-Xms256m -Xmx512m -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Djava.util.logging.config.file=${sitoolsCore}/conf/properties/sitools-logging.properties"
+ARGS="-Xms256m -Xmx512m -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true"
 
 
 
